@@ -173,13 +173,13 @@ enum {ENC_METHOD_192B104=0, ENC_METHOD_192B105, ENC_METHOD_192B185, ENC_METHOD_2
 #define V_RULES           14
 #define V_STRINGS          6
 #define V_MISC             10
-#define V_TILES            2 //2 will be either unsigned short, or long
+#define V_TILES            2 //2 is a long, max 214500 tiles (ZScript upper limit)
 #define V_COMBOS           11
 #define V_CSETS            4
 #define V_MAPS            19
 #define V_DMAPS            11
 #define V_DOORS            1
-#define V_ITEMS           37
+#define V_ITEMS           38
 #define V_WEAPONS          7
 #define V_COLORS           3 //Misc Colours
 #define V_ICONS            10 //Game Icons
@@ -825,6 +825,10 @@ enum
     qr_BROKENSTATUES /* Compatibility */, qr_NOSCRIPTSDURINGSCROLL /* Not Implemented */, qr_ITEMPICKUPSETSBELOW /* Compatibility */,
     
     qr_NOGANONINTRO, //bugfix//
+    qr_MELEEMAGICCOST,
+    qr_OLDMIRRORCOMBOS,
+    qr_BROKENBOOKCOST,
+
     qr_MAX
 };
 
