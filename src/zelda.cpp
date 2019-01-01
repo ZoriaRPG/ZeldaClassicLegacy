@@ -2897,6 +2897,10 @@ void game_loop()
             
             checklink=false;
         }
+	#if LOGGAMELOOP > 0
+	al_trace("game_loop is calling: %s\n", "FFCore.itemScriptEngine())\n");
+	#endif
+        FFCore.itemScriptEngine();
         #if LOGGAMELOOP > 0
 	al_trace("game_loop is calling: %s\n", "do_magic_casting()\n");
 	#endif
@@ -2908,10 +2912,7 @@ void game_loop()
         //FFCore.lweaponScriptEngine();
 	Lwpns.animate();
 	//FFCore.lweaponScriptEngine();
-        #if LOGGAMELOOP > 0
-	al_trace("game_loop is calling: %s\n", "FFCore.itemScriptEngine())\n");
-	#endif
-        FFCore.itemScriptEngine();
+       
 	#if LOGGAMELOOP > 0
 	al_trace("game_loop is calling: %s\n", "decorations.animate()\n");
 	#endif

@@ -108,7 +108,9 @@ public:
     bool blocked();
     void runscript(int index);
     virtual bool blocked(int xOffset, int yOffset);
-    virtual bool animate(int index);
+    virtual bool animate(int index, byte lwpns);
+    virtual bool LWanimate(int index, int flags = 1);
+    virtual bool EWanimate(int index, int flags = 0);
     virtual bool animateandrunscript(int index);
     virtual void onhit(bool clipped);
     virtual void onhit(bool clipped, int special, int linkdir);

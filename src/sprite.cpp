@@ -288,7 +288,7 @@ void sprite::drawcloaked2(BITMAP *)                     // top layer for special
 {
 }
 
-bool sprite::animate(int)
+bool sprite::animate(int, byte flags)
 {
     ++c_clk;
     return false;

@@ -119,7 +119,7 @@ public:
     virtual void drawshadow(BITMAP* dest, bool translucent);// main layer
     virtual void draw2(BITMAP* dest);                       // top layer for special needs
     virtual void drawcloaked2(BITMAP* dest);                // top layer for special needs
-    virtual bool animate(int index);
+    virtual bool animate(int index = 0, byte flags = 0);
     virtual void check_conveyor();
     int real_x(fix fx);
     int real_y(fix fy);
@@ -172,7 +172,7 @@ public:
     void drawshadow(BITMAP* dest,bool translucent, bool lowfirst);
     void draw2(BITMAP* dest,bool lowfirst);
     void drawcloaked2(BITMAP* dest,bool lowfirst);
-    void animate();
+    void animate(int index);
     void check_conveyor();
     int Count();
     int hit(sprite *s);
