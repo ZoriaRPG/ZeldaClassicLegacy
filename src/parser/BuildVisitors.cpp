@@ -1,10 +1,10 @@
 
 #include "../precompiled.h" //always first
-#include <assert.h>
+//#include <assert.h>
 
 #include "BuildVisitors.h"
 #include "CompileError.h"
-#include "Types.h"
+//#include "Types.h" //included in zscript.cpp
 #include "ZScript.h"
 
 using namespace ZScript;
