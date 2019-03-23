@@ -54,6 +54,7 @@ extern FFScript FFCore; //the core script engine.
 extern ZModule zcm; //modules
 extern zcmodule moduledata;
 extern char runningItemScripts[256];
+extern char modulepath[2048];
 #include "init.h"
 #include <assert.h>
 #include "zc_array.h"
@@ -3604,7 +3605,7 @@ int onFullscreen()
 int main(int argc, char* argv[])
 {
     bool onlyInstance=true;
-    
+    memset(modulepath, 0, sizeof(modulepath));
 #ifndef ALLEGRO_MACOSX // Should be done on Mac, too, but I haven't gotten that working
     if(!is_only_instance("zc.lck"))
     {
