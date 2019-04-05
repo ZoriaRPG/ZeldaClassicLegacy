@@ -717,11 +717,12 @@ void sprite::draw(BITMAP* dest)
 										if(tileToDraw%TILES_PER_ROW<j) // Wrapped around
 										tileToDraw+=TILES_PER_ROW*(tysz-1);
 								    
-										if(drawstyle==0 || drawstyle==3) overtile16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip));
-										else if(drawstyle==1) overtiletranslucent16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
-										else if(drawstyle==2) overtilecloaked16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,((scriptflip > -1) ? scriptflip : flip));
+										if(drawstyle==0 || drawstyle==3) overtile16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip));
+										else if(drawstyle==1) overtiletranslucent16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
+										else if(drawstyle==2) overtilecloaked16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+i*16,((scriptflip > -1) ? scriptflip : flip));
 									}
 								}
+								draw_sprite(dest, temp, x, y+playing_field_offset);
 							}
 						}
 						
@@ -797,11 +798,12 @@ void sprite::draw(BITMAP* dest)
 										if(tileToDraw%TILES_PER_ROW<j)
 											tileToDraw+=TILES_PER_ROW*(tysz-1);
 					    
-										if(drawstyle==0 || drawstyle==3) overtile16(dest,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip));
-										else if(drawstyle==1) overtiletranslucent16(dest,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
-										else if(drawstyle==2) overtilecloaked16(dest,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,((scriptflip > -1) ? scriptflip : flip));
+										if(drawstyle==0 || drawstyle==3) overtile16(temp,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip));
+										else if(drawstyle==1) overtiletranslucent16(temp,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
+										else if(drawstyle==2) overtilecloaked16(temp,tileToDraw,sx+j*16,sy+(tysz-i-1)*16,((scriptflip > -1) ? scriptflip : flip));
 									}
 								}
+								draw_sprite(dest, temp, x, y+playing_field_offset);
 							}
 							
 						}
@@ -877,11 +879,12 @@ void sprite::draw(BITMAP* dest)
 										if(tileToDraw%TILES_PER_ROW<j)
 											tileToDraw+=TILES_PER_ROW*(tysz-1);
 					    
-										if(drawstyle==0 || drawstyle==3) overtile16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip));
-										else if(drawstyle==1) overtiletranslucent16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
-										else if(drawstyle==2) overtilecloaked16(dest,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,((scriptflip > -1) ? scriptflip : flip));
+										if(drawstyle==0 || drawstyle==3) overtile16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip));
+										else if(drawstyle==1) overtiletranslucent16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
+										else if(drawstyle==2) overtilecloaked16(temp,tileToDraw,sx+(txsz-j-1)*16,sy+(tysz-i-1)*16,((scriptflip > -1) ? scriptflip : flip));
 									}
 								}
+								draw_sprite(dest, temp, x, y+playing_field_offset);
 								
 							}
 							
@@ -958,11 +961,12 @@ void sprite::draw(BITMAP* dest)
 										if(tileToDraw%TILES_PER_ROW<j)
 											tileToDraw+=TILES_PER_ROW*(tysz-1);
 						
-										if(drawstyle==0 || drawstyle==3) overtile16(dest,tileToDraw,sx+j*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip));
-										else if(drawstyle==1) overtiletranslucent16(dest,tileToDraw,sx+j*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
-										else if(drawstyle==2) overtilecloaked16(dest,tileToDraw,sx+j*16,sy+i*16,((scriptflip > -1) ? scriptflip : flip));
+										if(drawstyle==0 || drawstyle==3) overtile16(temp,tileToDraw,sx+j*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip));
+										else if(drawstyle==1) overtiletranslucent16(temp,tileToDraw,sx+j*16,sy+i*16,cs,((scriptflip > -1) ? scriptflip : flip),128);
+										else if(drawstyle==2) overtilecloaked16(temp,tileToDraw,sx+j*16,sy+i*16,((scriptflip > -1) ? scriptflip : flip));
 									}
 								}
+								draw_sprite(dest, temp, x, y+playing_field_offset);
 								
 							}
 							
