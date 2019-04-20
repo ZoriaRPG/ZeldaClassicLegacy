@@ -5428,6 +5428,7 @@ inline void bmp_do_drawbitmapexr(BITMAP *bmp, int *sdci, int xoffset, int yoffse
 	
 	int ref = 0;
 	ref = ri->bitmapref;
+	Z_scripterrlog("blit pointer is %d\n",ri->bitmapref);
 	//Z_scripterrlog("bitmap->blit() ref id this frame is: %d\n", ref);
 	ref -=10;
 	//Z_scripterrlog("bitmap->blit() modified ref id this frame is: %d\n", ref);

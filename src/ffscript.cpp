@@ -18147,11 +18147,17 @@ script_bitmaps scb;
 
 void FFScript::do_isvalidbitmap()
 {
-	Z_scripterrlog("isValidBitmap() bitmap pointer value is %d\n", ri->bitmapref);
-	if ( ri->bitmapref <= 0 ) set_register(sarg1, 0);
-	else if ( scb.script_created_bitmaps[ri->bitmapref-10].u_bmp ) 
+	
+	long UID = get_register(sarg1);
+	Z_scripterrlog("isValidBitmap() bitmap pointer value is %d\n", UID);
+	if ( UID <= 0 ) set_register(sarg1, 0); 
+	else if ( scb.script_created_bitmaps[UID-10].u_bmp ) 
 		set_register(sarg1, 10000);
 	else set_register(sarg1, 0);
+	
+	
+	
+	
 }
 
 void FFScript::user_bitmaps_init()
@@ -18194,7 +18200,7 @@ long FFScript::do_create_bitmap()
 	
 	if ( highest_valid_user_bitmap() >= (MAX_USER_BITMAPS-1) )
 	{
-		ri->bitmapref = 0;
+		//ri->bitmapref = 0;
 		Z_scripterrlog("Script attempted to create a bitmap, but no bitmaps are available. Setting ri->bitmapref to: %d\n", ri->bitmapref);
 		return id;
 	}
@@ -18213,11 +18219,11 @@ long FFScript::do_create_bitmap()
 			if ( id == 0 )
 			{
 				Z_scripterrlog("FFCore.do_create_bitmap() id is %d\n", id);
-				ri->bitmapref = -2;
+				return -2; //ri->bitmapref = -2;
 			}
 			else
 			{
-				ri->bitmapref = id+10; 
+				return id+10; //ri->bitmapref = id+10; 
 				
 				Z_eventlog("Script created bitmap ID %d, pointer (%d) with height of %d and width of %d\n", id, ri->bitmapref, h,w);
 	

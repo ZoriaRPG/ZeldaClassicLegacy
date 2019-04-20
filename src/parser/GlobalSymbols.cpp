@@ -3755,6 +3755,7 @@ void GameSymbols::generateCode()
 		//pop pointer, and ignore it
 		code.push_back(new OPopRegister(new VarArgument(NUL)));
 		code.push_back(new OSetRegister(new VarArgument(EXP1), new VarArgument(CREATEBITMAP)));
+		code.push_back(new OSetRegister(new VarArgument(EXP1), new VarArgument(REFBITMAP)));
 		code.push_back(new OReturn());
 		function->giveCode(code);
 	}
