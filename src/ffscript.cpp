@@ -15875,10 +15875,11 @@ int run_script(const byte type, const word script, const long i)
 	    {
 			int npc_index = GuyH::getNPCIndex(i);
 			enemy *w = (enemy*)guys.spr(npc_index);
-			ri = w->refinfo;
-			if (!ri) {
-			  ri = w->refinfo = new refInfo;
-			}
+			//ri = w->refinfo;
+			//if (!ri) {
+			//  ri = w->refinfo = new refInfo;
+			//}
+		        ri = &(guys.spr(GuyH::getNPCIndex(i))->refinfo);
 			//curscript = guyscripts[script];
 			curscript = guyscripts[guys.spr(GuyH::getNPCIndex(i))->script];
 			
@@ -15951,10 +15952,11 @@ int run_script(const byte type, const word script, const long i)
 			int lwpn_index = LwpnH::getLWeaponIndex(i);
 			//ri = &(lweaponScriptData[i]);
 			weapon *w = (weapon*)Lwpns.spr(lwpn_index);
-			ri = w->refinfo;
-			if (!ri) {
-			  ri = w->refinfo = new refInfo;
-			}
+			//ri = w->refinfo;
+			//if (!ri) {
+			//  ri = w->refinfo = new refInfo;
+			//}
+		        ri = &(Lwpns.spr(LwpnH::getLWeaponIndex(i))->refinfo);
 			//curscript = lwpnscripts[script];
 			curscript = lwpnscripts[Lwpns.spr(LwpnH::getLWeaponIndex(i))->weaponscript];
 			//Z_scripterrlog("FFScript is trying to run lweapon script: %d\n", curscript);
@@ -16032,10 +16034,11 @@ int run_script(const byte type, const word script, const long i)
 			int ewpn_index = EwpnH::getEWeaponIndex(i);
 			//ri = &(lweaponScriptData[i]);
 			weapon *w = (weapon*)Ewpns.spr(ewpn_index);
-			ri = w->refinfo;
-			if (!ri) {
-			  ri = w->refinfo = new refInfo;
-			}
+		        ri = &(Ewpns.spr(EwpnH::getEWeaponIndex(i))->refinfo);
+			//ri = w->refinfo;
+			//if (!ri) {
+			//  ri = w->refinfo = new refInfo;
+			//}
 			curscript = ewpnscripts[Ewpns.spr(EwpnH::getEWeaponIndex(i))->weaponscript];
 			
 			
@@ -16058,10 +16061,11 @@ int run_script(const byte type, const word script, const long i)
 			int the_index = ItemH::getItemIndex(i);
 			//ri = &(lweaponScriptData[i]);
 			item *w = (item*)items.spr(the_index);
-			ri = w->refinfo;
-			if (!ri) {
-			  ri = w->refinfo = new refInfo;
-			}
+			//ri = w->refinfo;
+			///if (!ri) {
+			//  ri = w->refinfo = new refInfo;
+			//}
+		        ri = &(items.spr(ItemH::getItemIndex(i))->refinfo);
 			curscript = itemspritescripts[items.spr(ItemH::getItemIndex(i))->script]; //Set the editor sprite script field to 'script'
 			
 			
