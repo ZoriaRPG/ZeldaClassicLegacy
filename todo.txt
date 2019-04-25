@@ -1,5 +1,8 @@
 To-Do
 
+Add Input->Modifiers for allegro modifier keys
+Add Input->Configs[] to read current controller configs.
+
 Allow decimal values in item editor power and attributes fields.
 
 Add freeze, freezeexcept, and such as script instructions.

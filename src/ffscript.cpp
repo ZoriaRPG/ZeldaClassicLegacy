@@ -15879,7 +15879,7 @@ int run_script(const byte type, const word script, const long i)
 			//if (!ri) {
 			//  ri = w->refinfo = new refInfo;
 			//}
-		        ri = &(guys.spr(GuyH::getNPCIndex(i))->refinfo);
+		        ri = (guys.spr(GuyH::getNPCIndex(i))->refinfo);
 			//curscript = guyscripts[script];
 			curscript = guyscripts[guys.spr(GuyH::getNPCIndex(i))->script];
 			
@@ -15956,7 +15956,7 @@ int run_script(const byte type, const word script, const long i)
 			//if (!ri) {
 			//  ri = w->refinfo = new refInfo;
 			//}
-		        ri = &(Lwpns.spr(LwpnH::getLWeaponIndex(i))->refinfo);
+		        ri = (Lwpns.spr(LwpnH::getLWeaponIndex(i))->refinfo);
 			//curscript = lwpnscripts[script];
 			curscript = lwpnscripts[Lwpns.spr(LwpnH::getLWeaponIndex(i))->weaponscript];
 			//Z_scripterrlog("FFScript is trying to run lweapon script: %d\n", curscript);
@@ -16034,7 +16034,7 @@ int run_script(const byte type, const word script, const long i)
 			int ewpn_index = EwpnH::getEWeaponIndex(i);
 			//ri = &(lweaponScriptData[i]);
 			weapon *w = (weapon*)Ewpns.spr(ewpn_index);
-		        ri = &(Ewpns.spr(EwpnH::getEWeaponIndex(i))->refinfo);
+		        ri = (Ewpns.spr(EwpnH::getEWeaponIndex(i))->refinfo);
 			//ri = w->refinfo;
 			//if (!ri) {
 			//  ri = w->refinfo = new refInfo;
@@ -16065,7 +16065,7 @@ int run_script(const byte type, const word script, const long i)
 			///if (!ri) {
 			//  ri = w->refinfo = new refInfo;
 			//}
-		        ri = &(items.spr(ItemH::getItemIndex(i))->refinfo);
+		        ri = (items.spr(ItemH::getItemIndex(i))->refinfo);
 			curscript = itemspritescripts[items.spr(ItemH::getItemIndex(i))->script]; //Set the editor sprite script field to 'script'
 			
 			

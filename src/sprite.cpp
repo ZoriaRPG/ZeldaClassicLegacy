@@ -89,7 +89,7 @@ sprite::sprite()
         dummy_float[i]=0;
         dummy_bool[i]=false;
     }
-    memset(refinfo,0,sizeof(refinfo);
+    refinfo->Clear(); //memset(refinfo,0,sizeof(refinfo));
     //for(int i=0;i<8;i++)
     //{
     //  if(i<2) a[i]=0;
@@ -215,7 +215,7 @@ do_animation(other.do_animation)
 //	stack[q] = other.stack[q];
     //}
     memset(stack, 0xFFFF, sizeof(stack));
-    memset(refinfo,0,sizeof(refinfo); //IDK if other.refinfo is sufficient
+    refinfo->Clear(); //memset(refinfo,0,sizeof(refinfo)); //IDK if other.refinfo is sufficient
     for (int i=0; i<8; ++i)
     {
       initD[i]=other.initD[i];
@@ -256,7 +256,7 @@ sprite::sprite(fix X,fix Y,int T,int CS,int F,int Clk,int Yofs):
     for(int i=0; i<32; i++) miscellaneous[i] = 0;
     
     scriptcoldet = 1;
-    memset(refinfo,0,sizeof(refinfo);
+    refinfo->Clear(); //memset(refinfo,0,sizeof(refinfo));
     //scriptData.Clear();
     //ewpnclass=0;
     //lwpnclass=0;
