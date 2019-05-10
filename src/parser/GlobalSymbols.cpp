@@ -7317,7 +7317,7 @@ static AccessorTable BitmapTable[] =
 	{ "Line",                   ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,    -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           } },
 	{ "Spline",                 ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,    -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           } },
 	{ "PutPixel",               ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,    -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,							  } },
-	{ "GetPixel",               ZVARTYPEID_FLOAT,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     -1,     -1,     -1,     -1,     -1,    -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,							  } },
+	{ "ReadPixel",               ZVARTYPEID_UNTYPED,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     -1,     -1,     -1,     -1,     -1,    -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,							  } },
 	{ "DrawCharacter",          ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,							  } },
 	{ "DrawInteger",            ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,                           -1,							  } },
 	{ "DrawTile",               ZVARTYPEID_VOID,          FUNCTION,     0,                    1,      {  ZVARTYPEID_BITMAP,		 ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,         ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,     ZVARTYPEID_FLOAT,      ZVARTYPEID_BOOL,    ZVARTYPEID_FLOAT,                           -1,                           -1,                           -1,                           -1,                           } },
@@ -7371,22 +7371,53 @@ BitmapSymbols::BitmapSymbols()
 
 void BitmapSymbols::generateCode()
 {
-	//int GetPixel(bitmap, x, y)
 	{
-		Function* function = getFunction("GetPixel");
+		Function* function = getFunction("ReadPixel");
 		int label = function->getLabel();
 		vector<Opcode *> code;
-		//pop off the params
-		Opcode *first = new OPopRegister(new VarArgument(INDEX2));
+		Opcode *first = new OBitmapGetpixel();
+		first->setLabel(label);  
+		code.push_back(first);
+		POP_ARGS(3, EXP2);
+		//pop pointer, and ignore it
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		code.push_back(new OReturn());
+        
+		function->giveCode(code);
+	}
+	/*
+	//void ReadPixel(bitmap, float, float, float, float, float)
+	{
+		Function* function = getFunction("ReadPixel");
+		int label = function->getLabel();
+		vector<Opcode *> code;
+		Opcode *first = new OBitmapGetpixel();
 		first->setLabel(label);
 		code.push_back(first);
-		code.push_back(new OPopRegister(new VarArgument(INDEX)));
+		POP_ARGS(3, EXP2);
 		//pop pointer, and ignore it
-		code.push_back(new OPopRegister(new VarArgument(NUL)));
-		code.push_back(new OSetRegister(new VarArgument(EXP1), new VarArgument(GETPIXEL)));
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		//POP_ARGS(1, EXP1);
 		code.push_back(new OReturn());
 		function->giveCode(code);
 	}
+	*/
+	////int GetPixel(bitmap, x, y)
+	//{
+	//	Function* function = getFunction("GetPixel");
+	//	int label = function->getLabel();
+	//	vector<Opcode *> code;
+	//	//pop off the params
+	//	Opcode *first = new OPopRegister(new VarArgument(INDEX2));
+	//	first->setLabel(label);
+	//	code.push_back(first);
+	//	code.push_back(new OPopRegister(new VarArgument(INDEX)));
+	//	//pop pointer, and ignore it
+	//	code.push_back(new OPopRegister(new VarArgument(NUL)));
+	//	code.push_back(new OSetRegister(new VarArgument(EXP1), new VarArgument(GETPIXEL)));
+	//	code.push_back(new OReturn());
+	//	function->giveCode(code);
+	//}
 	/*
 	//long Create(bitmap, int map,int scr)
 	{
@@ -7745,7 +7776,7 @@ void BitmapSymbols::generateCode()
 		code.push_back(new OReturn());
 		function->giveCode(code);
 	}
-	//void GetPixel(bitmap, float, float, float)
+	/*//void GetPixel(bitmap, float, float, float)
 	{
 		Function* function = getFunction("GetPixel");
 		int label = function->getLabel();
@@ -7760,7 +7791,42 @@ void BitmapSymbols::generateCode()
         
 		code.push_back(new OReturn());
 		function->giveCode(code);
+	}*/
+	/*
+	//void GetPixel(bitmap, float, float, float)
+	{
+		Function* function = getFunction("GetPixel");
+		int label = function->getLabel();
+		vector<Opcode *> code;
+		Opcode *first = new OPopRegister(new VarArgument(EXP2));
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		first->setLabel(label);
+		code.push_back(first);
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		code.push_back(new OBitmapGetpixel(new VarArgument(EXP1)));
+		
+        
+		code.push_back(new OReturn());
+		function->giveCode(code);
 	}
+	*/
+	/*//void GetPixel(bitmap, float, float, float, float, float)
+	{
+		Function* function = getFunction("ReadPixel");
+		int label = function->getLabel();
+		vector<Opcode *> code;
+		Opcode *first = new OBitmapGetpixel();
+		first->setLabel(label);
+		code.push_back(first);
+		POP_ARGS(3, EXP2);
+		//pop pointer, and ignore it
+		code.push_back(new OPopRegister(new VarArgument(EXP2)));
+		POP_ARGS(1, EXP1);
+		code.push_back(new OReturn());
+		function->giveCode(code);
+	}
+	*/
 	//void DrawLayer(bitmap, float, float, float, float, float, float, float, float)
 	{
 		Function* function = getFunction("DrawLayer");

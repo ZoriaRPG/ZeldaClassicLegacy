@@ -4421,9 +4421,14 @@ string OGraphicsGetpixel::toString()
     return "GRAPHICSGETPIXEL " + getArgument()->toString();
 }
 
-string OBitmapGetpixel::toString()
+/*string OBitmapGetpixel::toString()
 {
     return "BITMAPGETPIXEL " + getArgument()->toString();
+}*/
+
+string OBitmapGetpixel::toString()
+{
+    return "BITMAPGETPIXEL";
 }
 
 string OBMPDrawScreenSolidityRegister::toString()
