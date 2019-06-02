@@ -18759,7 +18759,7 @@ int run_script(const byte type, const word script, const long i)
 		break;
 	
 	case SCRIPT_SCREEN:
-		tmpscr->screen_waitdraw = 1;
+		tmpscr->screen_waitdraw |= 1;
 		break;
 	
 	case SCRIPT_ITEM:
@@ -18931,6 +18931,7 @@ int run_script(const byte type, const word script, const long i)
 int ffscript_engine(const bool preload)
 {
     //run screen script, first
+	if(preload && ((tmpscr->screen_waitdraw&2)))
 	ZScriptVersion::RunScript(SCRIPT_SCREEN, tmpscr->script, 0);
     
     for(byte i = 0; i < MAXFFCS; i++)

@@ -3000,10 +3000,10 @@ void game_loop()
 	dmap_waitdraw = false;
     }
     
-    if ( tmpscr->script != 0 && tmpscr->screen_waitdraw )
+    if ( tmpscr->script != 0 && (tmpscr->screen_waitdraw&1) )
     {
 	ZScriptVersion::RunScript(SCRIPT_SCREEN, tmpscr->script, 0);  
-	tmpscr->screen_waitdraw = 0;	    
+	tmpscr->screen_waitdraw |= ~1;	    
     }
     
     for ( int q = 0; q < 32; ++q )

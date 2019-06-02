@@ -10759,6 +10759,8 @@ static DIALOG screenscript_dlg[] =
     { jwin_button_proc,       70,    202,     61,     21,    vc(14),                 vc(1),                  13,       D_EXIT,      0,    0, (void *) "OK",                                  NULL,   NULL                  },
     { jwin_button_proc,      170,    202,     61,     21,    vc(14),                 vc(1),                  27,       D_EXIT,      0,    0, (void *) "Cancel",                              NULL,   NULL                  },
     
+    { jwin_check_proc,          112+10+20+34-4,    42+30,     60,      9,    vc(14),                 vc(1),                   0,       0,           1,    0, (void *) "Run On Screen Init",   NULL,   NULL                  },
+    
     { NULL,                0,    0,    0,    0,  0,                   0,                      0,      0,          0,             0,       NULL,                           NULL,  NULL }
 };
 
