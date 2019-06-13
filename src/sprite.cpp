@@ -2131,7 +2131,8 @@ void sprite::drawshadow(BITMAP* dest,bool translucent)
 /********** Sprite List ***********/
 /**********************************/
 
-#define SLMAX 255*256
+//#define SLMAX 255
+//#define SLMAX 255*256
 
 //class enemy;
 
