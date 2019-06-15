@@ -4707,7 +4707,7 @@ int main(int argc, char* argv[])
 #endif
             game_loop();
 	    //Perpetual item Script:
-	    FFCore.newScriptEngine();
+	    //FFCore.newScriptEngine();
             
 		
 	     //clear Link's last hits 

@@ -185,8 +185,8 @@ long getQuestHeaderInfo(int type);
 void do_graphics_getpixel();
 
 void clearRunningItemScripts();
-bool itemScriptEngine();
-bool itemScriptEngineOnWaitdraw();
+void itemScriptEngine();
+void itemScriptEngineOnWaitdraw();
 void lweaponScriptEngine();
 void eweaponScriptEngine();
 void eweaponScriptEngineOnWaitdraw();

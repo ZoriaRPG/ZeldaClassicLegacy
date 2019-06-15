@@ -43,7 +43,7 @@ extern refInfo itemScriptData[256];
 extern long item_stack[256][MAX_SCRIPT_REGISTERS];
 extern refInfo *ri; //= NULL;
 extern long(*stack)[MAX_SCRIPT_REGISTERS];
-extern byte item_doscript[256];
+extern int item_doscript[256];
 using std::set;
 
 extern int draw_screen_clip_rect_x1;
@@ -2296,8 +2296,8 @@ void LinkClass::checkstab()
 				//ri->Clear();
 				itemScriptData[items.spr(j)->id].Clear();
 				for ( int q = 0; q < 1024; q++ ) item_stack[items.spr(j)->id][q] = 0;
-			
-				ZScriptVersion::RunScript(SCRIPT_ITEM, itemsbuf[items.spr(j)->id].collect_script, items.spr(j)->id & 0xFFF);
+				item_doscript[items.spr(j)->id] = -1;
+				//ZScriptVersion::RunScript(SCRIPT_ITEM, itemsbuf[items.spr(j)->id].collect_script, items.spr(j)->id & 0xFFF);
 				//runningItemScripts[items.spr(j)->id] = 0;
 				
                         }
