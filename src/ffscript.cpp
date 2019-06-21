@@ -17442,13 +17442,14 @@ int run_script(const byte type, const word script, const long i)
 			//if (!ri) {
 			//  ri = w->refinfo = new refInfo;
 			//}
-			curscript = itemspritescripts[items.spr(ItemH::getItemIndex(i))->script]; //Set the editor sprite script field to 'script'
-			
+			curscript = itemspritescripts[items.spr(ItemH::getItemIndex(i))->itmscript];
+		    //items.spr(ItemH::getItemIndex(i))->script]; //Set the editor sprite script field to 'script'
+			Z_scripterrlog("Running itemsprite script: %d\n", curscript);
 			
 			stack = &(items.spr(ItemH::getItemIndex(i))->stack);
 			
-			item *wa = (item*)items.spr(ItemH::getItemIndex(i));
-			ri->itemref = wa->getUID();
+			//item *wa = (item*)items.spr(ItemH::getItemIndex(i));
+			ri->itemref = w->getUID();
 			
 			for ( int q = 0; q < 8; q++ ) 
 			{
@@ -19912,7 +19913,7 @@ int run_script(const byte type, const word script, const long i)
 		{
 		
 			items.spr(ItemH::getItemIndex(i))->doscript = 0;
-			items.spr(ItemH::getItemIndex(i))->script = 0;
+			items.spr(ItemH::getItemIndex(i))->itmscript = 0;
 			
 			//w->weaponscript = 0;
 			break;
@@ -23639,11 +23640,17 @@ void FFScript::eweaponScriptEngineOnWaitdraw()
 
 void FFScript::itemSpriteScriptEngine()
 {
+	Z_scripterrlog("itemSpriteScriptEngine, current items count is: %d\n", items.Count());
 	for ( int q = 0; q < items.Count(); q++ )
 	{
+		Z_scripterrlog("is script: %d\n",(items.spr(q)->itmscript));
 		item *wp = (item*)items.spr(q);
-		if ( wp->script == 0 ) continue;
-		if ( wp->doscript && FFCore.getQuestHeaderInfo(vZelda) < 0x255 ) ZScriptVersion::RunScript(SCRIPT_ITEMSPRITE, items.spr(q)->script, wp->getUID());		
+		if ( !(items.spr(q)->itmscript)) continue;
+		if ( items.spr(q)->doscript && FFCore.getQuestHeaderInfo(vZelda) < 0x255 )
+		{
+			Z_scripterrlog("is doscript\n");
+			ZScriptVersion::RunScript(SCRIPT_ITEMSPRITE, items.spr(q)->itmscript, items.spr(q)->getUID());		
+		}
 	}
 }
 
@@ -23654,9 +23661,9 @@ void FFScript::itemSpriteScriptEngineOnWaitdraw()
 		
 		item *wp = (item*)items.spr(q);
 
-		if ( wp->waitdraw && wp->doscript && wp->script && FFCore.getQuestHeaderInfo(vZelda) < 0x255 ) 
+		if ( wp->waitdraw && wp->doscript && wp->sprite_script && FFCore.getQuestHeaderInfo(vZelda) < 0x255 ) 
 		{
-			ZScriptVersion::RunScript(SCRIPT_ITEMSPRITE, items.spr(q)->script, wp->getUID());
+			ZScriptVersion::RunScript(SCRIPT_ITEMSPRITE, wp->sprite_script, wp->getUID());
 			wp->waitdraw = 0;
 		}			
 	}
@@ -27213,10 +27220,10 @@ void FFScript::TraceScriptIDs()
 			break;
 			
 			case SCRIPT_ITEMSPRITE:
-			    al_trace("itemsprite script %u (%s): ", curScriptNum, itemmap[curScriptNum-1].second.c_str());
+			    al_trace("itemsprite script %u (%s): ", curScriptNum, itemspritemap[curScriptNum-1].second.c_str());
 				#ifdef _WIN32
 				if ( zscript_debugger ) {zscript_coloured_console.cprintf((CConsoleLoggerEx::COLOR_GREEN | CConsoleLoggerEx::COLOR_INTENSITY | 
-					CConsoleLoggerEx::COLOR_BACKGROUND_BLACK),"itemsprite script %u (%s): ", curScriptNum, itemmap[curScriptNum-1].second.c_str());}
+					CConsoleLoggerEx::COLOR_BACKGROUND_BLACK),"itemsprite script %u (%s): ", curScriptNum, itemspritemap[curScriptNum-1].second.c_str());}
 				#endif
 			break;
 			

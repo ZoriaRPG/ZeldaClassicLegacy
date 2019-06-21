@@ -100,6 +100,7 @@ public:
     //byte ewpnclass;
     word script;
     word weaponscript;
+    word itmscript;
     long initD[8];
     long initA[2];
     long weap_initd[8];

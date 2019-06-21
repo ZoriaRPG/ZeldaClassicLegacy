@@ -269,6 +269,7 @@ sprite::sprite(fix X,fix Y,int T,int CS,int F,int Clk,int Yofs):
     //itemref=0;
     script = 0;
     weaponscript = 0;
+    itmscript = 0;
     scripttile = -1;
     scriptflip = -1;
     rotation = 0;

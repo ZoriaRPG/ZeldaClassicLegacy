@@ -48,13 +48,59 @@ bool item::animate(int)
 {
     if(!screenIsScrolling()) // Because subscreen items are items, too. :p
     {
+	    
+	/* this is the code used for weapons 
+	    
+		if ( obeys_gravity ) // from above, or if scripted
+		{
+			if(tmpscr->flags7&fSIDEVIEW)
+			{
+			    if(!_walkflag(x,y+16,0))
+			    {
+				y+=fall/100;
+				
+				if(fall <= (int)zinit.terminalv)
+				{
+				    fall += zinit.gravity;
+				}
+			    }
+			    else
+			    {
+				if(fall!=0 && !(step>0 && dir==up))  // Don't fix pos if still moving through solidness
+				    y-=(int)y%8; // Fix position
+				    
+				fall = 0;
+			    }
+			    
+			    if(y>192) dead=0;  // Out of bounds
+			}
+			else
+			{
+			    z-=fall/100;
+			    
+			    if(z<=0)
+			    {
+				z = fall = 0;
+			    }
+			    else if(fall <= (int)zinit.terminalv)
+			    {
+				fall += zinit.gravity;
+			    }
+			}
+		} 
+	    
+	*/
         if(is_side_view())
         {
             if
 	    (
-		(can_drop(x,y) && !(pickup & ipDUMMY) && !(pickup & ipCHECK))
-		||
-		(can_drop(x,y) && ipDUMMY && miscellaneous[31] == eeGANON ) //Ganon's dust pile
+		(
+			(can_drop(x,y) && !(pickup & ipDUMMY) && !(pickup & ipCHECK))
+			||
+			(can_drop(x,y) && ipDUMMY && miscellaneous[31] == eeGANON ) //Ganon's dust pile
+		) 
+		&& 
+		( obeys_gravity ) //if the user set item->Gravity = false, let it float. -Z
 	    )
             {
                 y+=fall/100;
@@ -74,22 +120,25 @@ bool item::animate(int)
         }
         else
         {
-            z-=fall/100;
-            
-            if(z<0)
-            {
-                z = 0;
-                fall = -fall/2;
-            }
-            else if(z <= 1 && abs(fall) < (int)zinit.gravity)
-            {
-                z=0;
-                fall=0;
-            }
-            else if(fall <= (int)zinit.terminalv)
-            {
-                fall += zinit.gravity;
-            }
+	    if ( obeys_gravity ) //if the user set item->Gravity = false, let it float. -Z
+	    {
+		    z-=fall/100;
+		    
+		    if(z<0)
+		    {
+			z = 0;
+			fall = -fall/2;
+		    }
+		    else if(z <= 1 && abs(fall) < (int)zinit.gravity)
+		    {
+			z=0;
+			fall=0;
+		    }
+		    else if(fall <= (int)zinit.terminalv)
+		    {
+			fall += zinit.gravity;
+		    }
+	    }
         }
     }
     
@@ -200,6 +249,9 @@ item::item(fix X,fix Y,fix Z,int i,int p,int c, bool isDummy) : sprite()
     aframe=aclk=0;
     anim=flash=twohand=subscreenItem=false;
     dummy_int[0]=PriceIndex=-1;
+    obeys_gravity = 1;
+    doscript = 1;
+    itmscript = itemsbuf[id].sprite_script;
 
     #ifndef IS_ZQUEST
 	script_UID = FFCore.GetScriptObjectUID(UID_TYPE_ITEM); //This is used by child npcs. 
@@ -286,7 +338,6 @@ item::item(fix X,fix Y,fix Z,int i,int p,int c, bool isDummy) : sprite()
 	    */
     }
     //if ( itemsbuf[id].flags&itemdataOVERRIDE_DRAW_Z_OFFSET ) zofs = itemsbuf[id].zofs;
-    script = itemsbuf[id].sprite_script;
 }
 
 // easy way to draw an item
