@@ -116,7 +116,8 @@ public:
     sprite(sprite const & other);
     sprite(fix X,fix Y,int T,int CS,int F,int Clk,int Yofs);
     virtual ~sprite();
-    virtual void draw(BITMAP* dest);                        // main layer
+    virtual void draw(BITMAP* dest, byte boss = 0);                        // main layer
+    virtual void drawex(BITMAP* dest);                        // main layer
     virtual void drawzcboss(BITMAP* dest);                        // main layer
     virtual void old_draw(BITMAP* dest);                        // main layer
     virtual void draw8(BITMAP* dest);                       // main layer

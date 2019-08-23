@@ -3279,7 +3279,7 @@ void enemy::old_draw(BITMAP *dest)
 #define DRAW_INVIS 0
 // base drawing function to be used by all derived classes instead of
 // sprite::draw()
-void enemy::draw(BITMAP *dest)
+void enemy::draw(BITMAP *dest, byte boss)
 {
     //Temporary fix for bugs when drawing some enemies. -Z
     //Statues need the invis flag set by the quest loader.
@@ -3561,7 +3561,7 @@ void enemy::drawblock(BITMAP *dest,int mask)
     switch(mask)
     {
     case 1:
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         break;
         
     case 3:
@@ -3569,10 +3569,10 @@ void enemy::drawblock(BITMAP *dest,int mask)
             zc_swap(t1,t2);
             
         tile=t1;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         tile=t2;
         yofs+=16;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         yofs-=16;
         break;
         
@@ -3583,10 +3583,10 @@ void enemy::drawblock(BITMAP *dest,int mask)
             zc_swap(t1,t2);
             
         tile=t1;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         tile=t2;
         xofs+=16;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         xofs-=16;
         break;
         
@@ -3604,17 +3604,17 @@ void enemy::drawblock(BITMAP *dest,int mask)
         }
         
         tile=t1;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         tile=t2;
         yofs+=16;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         yofs-=16;
         tile=t3;
         xofs+=16;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         tile=t4;
         yofs+=16;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         xofs-=16;
         yofs-=16;
         break;
@@ -10452,18 +10452,18 @@ void eDodongo::draw(BITMAP *dest)
     
     if(clk<0)
     {
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         return;
     }
     
     update_enemy_frame();
-    enemy::drawzcboss(dest);
+    enemy::draw(dest,1);
     
     if(dummy_int[1]!=0)  //additional tiles
     {
         tile+=dummy_int[1]; //second tile is previous tile
         xofs-=16;           //new xofs change
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         xofs+=16;
     }
     
@@ -10580,18 +10580,18 @@ void eDodongo2::draw(BITMAP *dest)
 {
     if(clk<0)
     {
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         return;
     }
     
     int tempx=xofs;
     int tempy=yofs;
     update_enemy_frame();
-    enemy::drawzcboss(dest);
+    enemy::draw(dest,1);
     tile+=dummy_int[1]; //second tile change
     xofs+=dummy_int[2]; //new xofs change
     yofs+=dummy_int[3]; //new yofs change
-    enemy::drawzcboss(dest);
+    enemy::draw(dest,1);
     xofs=tempx;
     yofs=tempy;
 }
@@ -10977,7 +10977,7 @@ void eGohma::draw(BITMAP *dest)
     
     if(clk<0 || dying)
     {
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         return;
     }
     
@@ -10991,14 +10991,14 @@ void eGohma::draw(BITMAP *dest)
         //      if(clk&16) tile=180;
         //      else { tile=182; flip=1; }
         tile+=(3*((clk&48)>>4));
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         
         // right side
         xofs=16;
         //      tile=(180+182)-tile;
         tile=o_tile;
         tile+=(3*((clk&48)>>4))+2;
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         
         // body
         xofs=0;
@@ -11014,7 +11014,7 @@ void eGohma::draw(BITMAP *dest)
         else
             tile+=((clk3-132)&24)?4:1;
             
-        enemy::drawzcboss(dest);
+        enemy::draw(dest,1);
         
     }
     else
