@@ -1220,11 +1220,12 @@ void sprite::draw(BITMAP* dest, byte boss)
         return;
     }
     
-    if ( (scale || rotation ) && (!get_bit(quest_rules,qr_OLDSPRITEDRAWS) ) && !boss )
-    {
-	drawex(dest); return;    
-    }
-    //else if ( boss ) drawzcboss(dest);
+    //if ( (scale || rotation ) && (!get_bit(quest_rules,qr_OLDSPRITEDRAWS) ) && !boss )
+    //{
+//	drawex(dest); return;    
+    //}
+    //else if ( boss ) 
+    if (1) drawzcboss(dest);
     else
     {
 	    int sx = real_x(x+xofs);
