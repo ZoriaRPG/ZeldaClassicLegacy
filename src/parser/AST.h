@@ -377,11 +377,6 @@ namespace ZScript
 
 		owning_vector<ASTSetOption> options;
 		owning_vector<ASTStmt> statements;
-		
-		Scope* getScope() {return scope;}
-		void setScope(Scope* scp) {scope = scp;}
-	private:
-		Scope* scope;
 	};
     
 	class ASTStmtIf : public ASTStmt

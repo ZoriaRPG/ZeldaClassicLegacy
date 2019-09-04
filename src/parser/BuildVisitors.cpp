@@ -105,12 +105,6 @@ void BuildOpcodes::caseUsing(ASTUsingDecl& host, void*)
 
 void BuildOpcodes::caseBlock(ASTBlock &host, void *param)
 {
-	if(!host.getScope())
-	{
-		host.setScope(scope->makeChild());
-	}
-	scope = host.getScope();
-	
 	OpcodeContext *c = (OpcodeContext *)param;
 
 	int startRefCount = arrayRefs.size();
@@ -124,8 +118,6 @@ void BuildOpcodes::caseBlock(ASTBlock &host, void *param)
 	deallocateRefsUntilCount(startRefCount);
 	while ((int)arrayRefs.size() > startRefCount)
 		arrayRefs.pop_back();
-	
-	scope = scope->getParent();
 }
 
 void BuildOpcodes::caseStmtIf(ASTStmtIf &host, void *param)

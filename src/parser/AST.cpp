@@ -317,8 +317,8 @@ ASTStmt::ASTStmt(LocationData const& location)
 
 // ASTBlock
 
-ASTBlock::ASTBlock(LocationData const& location) : ASTStmt(location), scope(NULL) {}
-
+ASTBlock::ASTBlock(LocationData const& location) : ASTStmt(location) {}
+    
 void ASTBlock::execute(ASTVisitor& visitor, void* param)
 {
 	visitor.caseBlock(*this, param);
