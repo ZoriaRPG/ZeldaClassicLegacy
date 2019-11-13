@@ -324,7 +324,8 @@ void do_getdmapbyname();
 
 int getLinkOTile(long index1, long index2);
 int getLinkOFlip(long index1, long index2);
-defWpnSprite getDefWeaponSprite(int wpnid);
+//defWpnSprite getDefWeaponSprite(int wpnid);
+int getDefWeaponSprite(int wpnid);
 //defWpnSprite getDefWeaponSprite(weapon *wp);
 
 //ZC SRAM
