@@ -14775,8 +14775,6 @@ bool edit_combo(int c,bool freshen,int cs)
     
     int index=0;
     
-    al_trace("Last Selection: %d\n", last_droplist_sel);
-    
     for(int j=0; j<bict_cnt; j++)
     {
         if(bict[j].i == curr_combo.type)
@@ -14819,29 +14817,38 @@ bool edit_combo(int c,bool freshen,int cs)
     }
     
     setComboLabels(combo_dlg[25].d1);
-    int ret = -1;
+    int ret;
     
-    
+    do
+    {
+        ret=zc_popup_dialog(combo_dlg,4);
+        
+        if(ret==43)
+            ctype_help(bict[combo_dlg[25].d1].i);
+        else if(ret==44)
+            cflag_help(combo_dlg[34].d1);
+    }
+    while(ret == 43 || ret == 44);
     
     if(freshen)
     {
         refresh(rALL);
     }
-    
-    //if(ret==43)
-    //{
-    //}
-    
     do
     {
-	
-	//else if(ret == 1)
-	//	setComboLabels(combo_dlg[25].d1);
-	
-	//else if(ret==2 || ret==45 || ret==86 || ret==100 ) //position of OK buttons
-	//{
+        ret=zc_popup_dialog(combo_dlg,4);
+	    if(ret==43)
+	    {
+	    }
+	    
+	    if(ret==25)
+			{
+				setComboLabels(combo_dlg[25].d1);
+			}
+	    
+	    if(ret==2 || ret==45 || ret==86 || ret==100 ) //position of OK buttons
+	    {
 		saved=false;
-		//setComboLabels(combo_dlg[25].d1);
 		curr_combo.csets = csets;
 		
 		for(int i=0; i<4; i++)
@@ -15027,8 +15034,7 @@ bool edit_combo(int c,bool freshen,int cs)
 		if(combo_dlg[99].flags & D_SELECTED) { curr_combo.triggerflags[1] |= 0x4000; } else { curr_combo.triggerflags[1] &= ~0x4000; }
 		//three bits left for the second index (for ZScript supported values)
 
-		ret=zc_popup_dialog(combo_dlg,4);
-        
+
 		
 		curr_combo.csets = vbound(atoi(cset_str),-15,15) & 15; //Bound this to a size of csets, so that it does not wrap!
 		
@@ -15058,7 +15064,6 @@ bool edit_combo(int c,bool freshen,int cs)
 		
 		curr_combo.speed = vbound(atoi(spd),0,255);  //bind to size of byte! -Z
 		curr_combo.type = bict[combo_dlg[25].d1].i;
-		//setComboLabels(bict[combo_dlg[25].d1].i);
 		curr_combo.nextcombo = combo_dlg[32].d1;
 		curr_combo.nextcset = combo_dlg[32].fg;
 		curr_combo.flag = combo_dlg[34].d1;
@@ -15078,27 +15083,15 @@ bool edit_combo(int c,bool freshen,int cs)
 		curr_combo.animflags |= (combo_dlg[40].flags & D_SELECTED) ? AF_FRESH : 0;
 		curr_combo.animflags |= (combo_dlg[42].flags & D_SELECTED) ? AF_CYCLE : 0;
 		strcpy(curr_combo.label, the_label);
-		
-		if(ret==25)
-		{
-			setComboLabels(combo_dlg[25].d1);
-		}
-		
-		if(ret==43)
-		    ctype_help(bict[combo_dlg[25].d1].i);
-		else if(ret==44)
-		    cflag_help(combo_dlg[34].d1);
-		
-		
-		
-	//}
-    
+	    }
+	
+	}while(ret != 2 && ret != 3 && ret != 45 && ret != 46 && ret != 86 && ret != 87 && ret != 100 && ret != 101);
+	
+	if ( ret == 2 || ret == 45 || ret == 86 || ret == 100 )
+		ret==2 || ret==45 || ret==86 || ret==100
+	combobuf[c] = curr_combo;
 	    
-    } while ( ret != 0 && ret != 2 && ret != 3 && ret!=45 && ret != 46 && ret!=86 && ret!=100 );
-    if ( ret == 2 || ret == 45 ) //save it
-    {
-	    combobuf[c] = curr_combo;
-	    saved = false;
+	    
 	    if(freshen)
 	    {
 		refresh(rALL);
@@ -15106,8 +15099,7 @@ bool edit_combo(int c,bool freshen,int cs)
 	    
 	    setup_combo_animations();
 	    setup_combo_animations2();
-    }
-    return ret;
+	    return (ret==2);
 }
 
 int d_itile_proc(int msg,DIALOG *d,int)
