@@ -17220,11 +17220,43 @@ void FFScript::do_graphics_getpixel()
 {
 	long bitmap_pointer     = (ri->d[2])-10;
 	long xpos  = ri->d[1] / 10000;
-	long ypos = ri->d[0] / 10000;
 	
-	if ( scb.script_created_bitmaps[bitmap_pointer].u_bmp )
-	set_register(sarg1, getpixel(scb.script_created_bitmaps[bitmap_pointer].u_bmp, xpos, ypos));
-	else set_register(sarg1, -10000);
+	int yoffset = 0;
+	const bool brokenOffset= ( (get_bit(extra_rules, er_BITMAPOFFSET)!=0) || (get_bit(quest_rules,qr_BITMAPOFFSETFIX)!=0) );
+	
+	
+	if(!brokenOffset && ri->bitmapref == 10-1 )
+	{
+		yoffset = 56; //should this be -56?
+	}
+	else
+	{
+		yoffset = 0;
+	}
+	
+	long ypos = ri->d[0] / 10000 + yoffset;	
+	
+	//zprint2("graphics_getpixel pointer is %d\n", bitmap_pointer);
+	if ( bitmap_pointer == -1 || bitmap_pointer == -2 ) //the screen
+	{
+		zprint2("GetPixel bitmap is RT_SCREEN\n");
+		int col = getpixel(framebuf, xpos, ypos);
+		zprint2("GetPixel Screen Colour at x(%d), y(%d) is: %d\n", xpos, ypos, col);
+		set_register(sarg1, col);
+	}
+	else
+	{
+		if ( scb.script_created_bitmaps[bitmap_pointer].u_bmp )
+		set_register(sarg1, getpixel(scb.script_created_bitmaps[bitmap_pointer].u_bmp, xpos, ypos));
+		
+			
+		{
+			Z_scripterrlog("Getpixel: Loaded from ScrollBuf/n");
+			set_register(sarg1, getpixel(scrollbuf, xpos, ypos));
+		}
+			//set_register(sarg1, -10000);
+		
+	}
 }
 
 //Some of these need to be reduced to two inputs. -Z
@@ -24697,6 +24729,7 @@ int FFScript::do_getpixel()
 	//zscriptDrawingRenderTarget->SetCurrentRenderTarget(ri->bitmapref);
 	//BITMAP *bitty = zscriptDrawingRenderTarget->GetBitmapPtr(ri->bitmapref);
 	BITMAP *bitty = FFCore.GetScriptBitmap(ri->bitmapref-10);
+	zprint2("Getpixel pointer is: %d\n", ri->bitmapref-10);
 	Z_scripterrlog("Getpixel pointer is: %d\n", ri->bitmapref-10);
 	//bmp = targetBitmap;
 	if(!bitty)
