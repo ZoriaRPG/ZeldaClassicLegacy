@@ -3170,6 +3170,7 @@ static bool register_name()
 			saveslot = pos + listpos;
 			quest = 255;
 			custom_game(saveslot);
+			//goto do_ignore;
 			//moduledata.ignore = 0; //This invalidates it for setting up a new slot. The code for this needs to run during creating a save slot! -Z
 		}
 		else
@@ -3207,33 +3208,43 @@ static bool register_name()
 		
 //	setPackfilePassword(datapwd);
 		//0 is success
-		int ret = load_quest(saves+s);
 		
-		if(ret==qe_OK)
+		
+		//do_ignore:
+	
+		/*if(moduledata.ignore)
 		{
-			flushItemCache();
-			//messy hack to get this to work, since game is not yet initialized -DD
-			gamedata *oldgame = game;
-			game = saves+s;
-			saves[s].set_maxlife(zinit.hc*HP_PER_HEART);
-			//saves[s].items[itype_ring]=0;
-			removeItemsOfFamily(&saves[s], itemsbuf, itype_ring);
-			int maxringid = getHighestLevelOfFamily(&zinit, itemsbuf, itype_ring);
 			
-			if(maxringid != -1)
-				getitem(maxringid, true);
-				
-			//      game->set_maxbombs(&saves[s], zinit.max_bombs);
-			selectscreen();                                       // refresh palette
-			game = oldgame;
-			ringcolor(false);
-			load_game_icon_to_buffer(false,s);
-			load_game_icon(saves+s, true, s);
 		}
-		else
+		else*/
 		{
-			ringcolor(true);
-			load_game_icon(saves+s, true, s);
+			int ret = load_quest(saves+s);
+			if(ret==qe_OK)
+			{
+				flushItemCache();
+				//messy hack to get this to work, since game is not yet initialized -DD
+				gamedata *oldgame = game;
+				game = saves+s;
+				saves[s].set_maxlife(zinit.hc*HP_PER_HEART);
+				//saves[s].items[itype_ring]=0;
+				removeItemsOfFamily(&saves[s], itemsbuf, itype_ring);
+				int maxringid = getHighestLevelOfFamily(&zinit, itemsbuf, itype_ring);
+				
+				if(maxringid != -1)
+					getitem(maxringid, true);
+					
+				//      game->set_maxbombs(&saves[s], zinit.max_bombs);
+				selectscreen();                                       // refresh palette
+				game = oldgame;
+				ringcolor(false);
+				load_game_icon_to_buffer(false,s);
+				load_game_icon(saves+s, true, s);
+			}
+			else
+			{
+				ringcolor(true);
+				load_game_icon(saves+s, true, s);
+			}
 		}
 		
 //    setPackfilePassword(NULL);
