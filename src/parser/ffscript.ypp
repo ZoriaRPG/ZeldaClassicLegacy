@@ -1444,6 +1444,9 @@ Literal :
 	NUMBER {
 		ASTFloat* val = (ASTFloat*)$1;
 		$$ = new ASTNumberLiteral(val, @$);}
+	NUMBER LPAREN{
+		ASTFloat* val = (ASTFloat*)$1;
+		$$ = new ASTNumberLiteral(val, @$);}
 	| SINGLECHAR {
 		ASTString* as = (ASTString*)$1;
 		char val[15];
