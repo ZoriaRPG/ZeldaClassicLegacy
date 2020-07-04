@@ -1214,6 +1214,13 @@ Identifier :
 	IDENTIFIER {$$ = $1;}
 	;
 
+Expr_X_Call :
+	NUMBER LPAREN RPAREN {
+		yymsg("Error: Cannot use a number as a function!", yyrow, yycol);}
+	| NUMBER LPAREN Expr_3_Call_Parameters RPAREN {
+		yymsg("Error: Cannot use a number as a function!", yyrow, yycol);}
+	;
+	
 Expr_3_Call :
 	Expr_3 LPAREN RPAREN {
 		ASTExprCall* call = new ASTExprCall(@$);
