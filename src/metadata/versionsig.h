@@ -28,6 +28,10 @@
 #define ZQ_EDITOR_V "2.55"
 #define ZQ_EDITOR_COPYRIGHT "Copyright (C) 2021"
 
+#define TEZSLA_EDITOR_NAME "TeZSLa Compiler"
+#define TEZSLA_EDITOR_V "1.0"
+#define TEZSLA_EDITOR_COPYRIGHT "Copyright (C) 2021"
+
 #define ZC_PLAYER_NAME "ZQuest Classic Player"
 #define ZC_PLAYER_V "2.55"
 #define ZC_PLAYER_COPYRIGHT "Copyright (C) 2021"

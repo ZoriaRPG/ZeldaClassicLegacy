@@ -30856,169 +30856,35 @@ int main(int argc,char **argv)
 	
 	if ( V_ZC_ALPHA )
 	{
-		Z_title("%s, v.%s Alpha %d",ZQ_EDITOR_NAME, ZQ_EDITOR_V, V_ZC_ALPHA);
+		Z_title("%s, v.%s Alpha %d",TEZSLA_EDITOR_NAME, TEZSLA_EDITOR_V, V_ZC_ALPHA);
 	}
 		
 	else if ( V_ZC_BETA )
 	{
-		Z_title("%s, v.%s Beta %d",ZQ_EDITOR_NAME, ZQ_EDITOR_V, V_ZC_BETA);
+		Z_title("%s, v.%s Beta %d",TEZSLA_EDITOR_NAME, TEZSLA_EDITOR_V, V_ZC_BETA);
 	}
 	else if ( V_ZC_GAMMA )
 	{
-		Z_title("%s, v.%s Gamma %d",ZQ_EDITOR_NAME, ZQ_EDITOR_V, V_ZC_GAMMA);
+		Z_title("%s, v.%s Gamma %d",TEZSLA_EDITOR_NAME, TEZSLA_EDITOR_V, V_ZC_GAMMA);
 	}
 	else /*( V_ZC_RELEASE )*/
 	{
-		Z_title("%s, v.%s Release %d",ZQ_EDITOR_NAME, ZQ_EDITOR_V, V_ZC_RELEASE);
+		Z_title("%s, v.%s Release %d",TEZSLA_EDITOR_NAME, TEZSLA_EDITOR_V, V_ZC_RELEASE);
 	}
 	
-	/*
-		    switch(IS_BETA)
-		    {
-		    case -1:
-		    {
-			Z_title("ZQuest %s Alpha (Build %d)",VerStr(ZELDA_VERSION), VERSION_BUILD);
-			//Print the current time to allegro.log as a test.
-			
-			break;
-		    }
-		    case 1:
-			Z_title("ZQuest %s Beta (Build %d)",VerStr(ZELDA_VERSION), VERSION_BUILD);
-			break;
-			
-		    case 0:
-			Z_title("ZQuest %s (Build %d)",VerStr(ZELDA_VERSION), VERSION_BUILD);
-		    }
-	*/
-    
     scrtmp = NULL;
-    
-    //turn on MSVC memory checks
-    //this should be interesting...
-    
-    //InitCrtDebug();
-    
     
     // Before anything else, let's register our custom trace handler:
     register_trace_handler(zc_trace_handler);
     
-    /*
-    	// Initialize SDL
-    	if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-    		fprintf(stderr, "Couldn't initialize SDL: %s\n",SDL_GetError());
-    		return(1);
-    	}
-    
-    	// Initialize the display
-    	int w=800, h=600;
-    	int desired_bpp=8;
-    	Uint32 video_flags=SDL_HWSURFACE|SDL_HWPALETTE;
-    	sdl_screen = SDL_SetVideoMode(w, h, desired_bpp, video_flags);
-    	if ( sdl_screen == NULL ) {
-    		fprintf(stderr, "Couldn't set %dx%dx%d video mode: %s\n",
-    					w, h, desired_bpp, SDL_GetError());
-    		exit(1);
-    	}
-    
-    	// Set the window manager title bar
-    	SDL_WM_SetCaption("SDL test window", "testwin");
-    */
     PopulateInitDialog();
     //FFScript::init();
-    memrequested+=sizeof(zctune)*MAXCUSTOMMIDIS_ZQ;
-    Z_message("Allocating tunes buffer (%s)... ", byte_conversion2(sizeof(zctune)*MAXCUSTOMMIDIS_ZQ,memrequested,-1,-1));
-    customtunes = (zctune*)zc_malloc(sizeof(class zctune)*MAXCUSTOMMIDIS_ZQ);
-    memset(customtunes, 0, sizeof(class zctune)*MAXCUSTOMMIDIS_ZQ);
+    //memrequested+=sizeof(zctune)*MAXCUSTOMMIDIS_ZQ;
+    //Z_message("Allocating tunes buffer (%s)... ", byte_conversion2(sizeof(zctune)*MAXCUSTOMMIDIS_ZQ,memrequested,-1,-1));
+    //customtunes = (zctune*)zc_malloc(sizeof(class zctune)*MAXCUSTOMMIDIS_ZQ);
+    //memset(customtunes, 0, sizeof(class zctune)*MAXCUSTOMMIDIS_ZQ);
     
-    /*
-    FFCore.ZScriptConsole
-			    (
-				
-				CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-				CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"%s, v.%s Alpha %d",ZQ_EDITOR_NAME, ZQ_EDITOR_V, V_ZC_ALPHA
-			    );*/
-    
-    if(!customtunes)
-    {
-
-	/*FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-			"Failed to load custom music files."
-	);
-	    */
-
-        Z_error("Error");
-        quit_game();
-    }
-    
-    Z_message("OK\n");                                      // Allocating MIDI buffer...
-    
-    /*memrequested+=sizeof(emusic)*MAXMUSIC;
-    Z_message("Allocating Enhanced Music buffer (%s)... ", byte_conversion2(sizeof(emusic)*MAXMUSIC,memrequested,-1,-1));
-    enhancedMusic = (emusic*)zc_malloc(sizeof(emusic)*MAXMUSIC);
-    if(!enhancedMusic)
-    {
-      Z_error("Error");
-    }
-    Z_message("OK\n");                                      // Allocating Enhanced Music buffer...
-    */
-    if(!get_qst_buffers())
-    {
-
-	/*FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "Failed to load quest buffers."
-	);*/
-	    
-
-        Z_error("Error");
-        quit_game();
-    }
-    
-    memrequested+=sizeof(newcombo)*MAXCOMBOS;
-    Z_message("Allocating combo undo buffer (%s)... ", byte_conversion2(sizeof(newcombo)*MAXCOMBOS,memrequested,-1,-1));
-    undocombobuf = (newcombo*)zc_malloc(sizeof(newcombo)*MAXCOMBOS);
-    
-    if(!undocombobuf)
-    {
-
-	/*FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "No memory for combo undo buffer!"
-	);*/
-
-        Z_error("Error: no memory for combo undo buffer!");
-        quit_game();
-    }
-    
-    Z_message("OK\n");                                      // Allocating combo undo buffer...
-    
-    memrequested+=(NEWMAXTILES*sizeof(tiledata));
-    Z_message("Allocating new tile undo buffer (%s)... ", byte_conversion2(NEWMAXTILES*sizeof(tiledata),memrequested,-1,-1));
-    
-    if((newundotilebuf=(tiledata*)zc_malloc(NEWMAXTILES*sizeof(tiledata)))==NULL)
-    {
-        Z_error("Error: no memory for tile undo buffer!");
-        quit_game();
-    }
-    
-    memset(newundotilebuf, 0, NEWMAXTILES*sizeof(tiledata));
-    Z_message("OK\n");                                        // Allocating new tile buffer...
-    
-    Z_message("Resetting new tile buffer...");
-    newtilebuf = (tiledata*)zc_malloc(NEWMAXTILES*sizeof(tiledata));
-    
-    for(int j=0; j<NEWMAXTILES; j++)
-        newtilebuf[j].data=NULL;
-        
-    Z_message("OK\n");
-    
+   
     memrequested+=(2048*5);
     Z_message("Allocating file path buffers (%s)... ", byte_conversion2(2048*7,memrequested,-1,-1));
     filepath=(char*)zc_malloc(2048);
@@ -31031,14 +30897,6 @@ int main(int argc,char **argv)
     
     if(!filepath || !datapath || !temppath || !imagepath || !midipath || !tmusicpath || !last_timed_save)
     {
-
-	/*FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "No memory for file paths!"
-	);
-	    */
 
         Z_error("Error: no memory for file paths!");
         quit_game();
@@ -31059,19 +30917,9 @@ int main(int argc,char **argv)
     loadpng_init();
     
     //set_config_file("ag.cfg");
-    set_config_file("zquest.cfg");
+    set_config_file("tezsla.cfg");
     if(install_timer() < 0)
     {
-
-	    /*
-	FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "Failed to init allegro timers!"
-	);
-	    */
-
         Z_error(allegro_error);
         quit_game();
     }
@@ -31079,30 +30927,14 @@ int main(int argc,char **argv)
     if(install_keyboard() < 0)
     {
 
-	    /*
-	FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "Failed to install keyboard!"
-	);
-	    */
-
         Z_error(allegro_error);
         quit_game();
     }
     
-    if(install_mouse() < 0)
+    if(install_mouse() < 0) //Remove me when ready
     {
 
-	/*FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "Failed to install mouse!"
-	);
-	    */
-
+	
         Z_error(allegro_error);
         quit_game();
     }
@@ -31116,15 +30948,6 @@ int main(int argc,char **argv)
     
     if(install_int_ex(fps_callback,SECS_TO_TIMER(1)))
     {
-
-	/*
-	    FFCore.ZScriptConsole
-	(
-		CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-			CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-	    "Failed to allocate timer fps callback!"
-	);
-	    */
 
         Z_error("couldn't allocate timer");
         quit_game();
@@ -31185,7 +31008,7 @@ int main(int argc,char **argv)
     
     Z_message("OK\n");
     
-    Z_message("ZQuest.Dat...");
+    /*Z_message("ZQuest.Dat...");
     
     if((zcdata=load_datafile(moduledata.datafiles[zquest_dat]))==NULL)
     {
@@ -31200,6 +31023,7 @@ int main(int argc,char **argv)
         Z_error("failed");
         quit_game();
     }
+    
     
     datafile_str=moduledata.datafiles[zquest_dat];
     Z_message("OK\n");
@@ -31229,7 +31053,9 @@ int main(int argc,char **argv)
         Z_error("failed");
         quit_game();
     }
+    */
     
+    /*
     char qstdat_read_sig[52];
     memset(qstdat_read_sig, 0, 52);
     int pos=0;
@@ -31261,7 +31087,7 @@ int main(int argc,char **argv)
     }
     
     Z_message("OK\n");
-    
+    */
     
     //setPackfilePassword(NULL);
     packfile_password("");
@@ -31376,7 +31202,7 @@ int main(int argc,char **argv)
 		 z2font=(FONT*)fontsdata[FONT_ZZ_ZELDA2].dat;  
 		 zxfont=(FONT*)fontsdata[FONT_ZZ_ZX].dat; 
 		 lisafont=(FONT*)fontsdata[FONT_ZZZ_LISA].dat;
-    
+    /*
     for(int i=0; i<MAXCUSTOMTUNES; i++)
     {
         customtunes[i].data=NULL;
@@ -31396,7 +31222,9 @@ int main(int argc,char **argv)
             memset(&custom_subscreen[i].objects[j],0,sizeof(subscreen_object));
         }
     }
+    */
     
+    //!change me!
     int helpsize = file_size_ex_password("docs/zquest.txt","");
     
     if(helpsize==0)
@@ -31462,6 +31290,7 @@ int main(int argc,char **argv)
     helpstr = helpbuf;
     Z_message("Found zquest.txt\n");                                      // loading data files...
     
+    //remove me
     int shieldblockhelpsize = file_size_ex_password("docs/shield_block_flags.txt","");
     
     if(shieldblockhelpsize==0)
@@ -31681,7 +31510,7 @@ int main(int argc,char **argv)
     // loading data files...
     
     
-    init_qts();
+    //init_qts();
     
     filepath[0]=temppath[0]=0;
     
@@ -31834,6 +31663,7 @@ int main(int argc,char **argv)
         zq_screen_w=800;
         zq_screen_h=600;
         
+	//remove us
         combolist_window.x=576;
         combolist_window.y=0;
         combolist_window.w=224;
@@ -32139,16 +31969,17 @@ int main(int argc,char **argv)
 		}
     }
     
-    
+    /*
     if(used_switch(argc,argv,"-d"))
     {
         resolve_password(zquestpwd);
         set_debug(!strcmp(zquestpwd,get_config_string("zquest","debug_this","")));
     }
+    */
     
     char qtnametitle[20];
     char qtpathtitle[20];
-    
+    /*
     for(int x=1; x<MAXQTS; ++x)
     {
         sprintf(qtnametitle, "%s%d", qtname_name, x);
@@ -32162,7 +31993,7 @@ int main(int argc,char **argv)
             break;
         }
     }
-    
+    */
     Z_message("Initializing sound driver... ");
     
     if(used_switch(argc,argv,"-s"))
@@ -32204,8 +32035,8 @@ int main(int argc,char **argv)
         exit(0);
     }
     
-    zcmusic_init();
-    zcmusic_init();
+    //zcmusic_init();
+    //zcmusic_init();
     
     switch(zqColorDepth) //defaults to 8bit
     {
@@ -32267,17 +32098,8 @@ int main(int argc,char **argv)
     
 #endif
     
-    if(used_switch(argc,argv,"-fullscreen"))
-    {
-        tempmode = GFX_AUTODETECT_FULLSCREEN;
-        zqwin_set_scale(1);
-    }
-    else if(used_switch(argc,argv,"-windowed"))
-    {
-        tempmode=GFX_AUTODETECT_WINDOWED;
+	tempmode=GFX_AUTODETECT_WINDOWED;
         zqwin_set_scale(scale_arg);
-    }
-    
     /*if (tempmode==GFX_AUTODETECT_FULLSCREEN)
     {
     #ifdef ALLEGRO_MACOSX
@@ -32306,19 +32128,9 @@ int main(int argc,char **argv)
 	    loadpng_init();
 	    
 	    //set_config_file("ag.cfg");
-	    set_config_file("zquest.cfg");
+	    set_config_file("tezsla.cfg");
 	    if(install_timer() < 0)
 	    {
-
-		    /*
-		FFCore.ZScriptConsole
-		(
-			CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-				CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-		    "Failed to init allegro timers!"
-		);
-		    */
-
 		Z_error(allegro_error);
 		quit_game();
 	    }
@@ -32326,29 +32138,12 @@ int main(int argc,char **argv)
 	    if(install_keyboard() < 0)
 	    {
 
-		    /*
-		FFCore.ZScriptConsole
-		(
-			CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-				CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-		    "Failed to install keyboard!"
-		);
-		    */
-
 		Z_error(allegro_error);
 		quit_game();
 	    }
 	    
 	    if(install_mouse() < 0)
 	    {
-
-		/*FFCore.ZScriptConsole
-		(
-			CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-				CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-		    "Failed to install mouse!"
-		);
-		    */
 
 		Z_error(allegro_error);
 		quit_game();
@@ -32364,15 +32159,6 @@ int main(int argc,char **argv)
 	    if(install_int_ex(fps_callback,SECS_TO_TIMER(1)))
 	    {
 
-		/*
-		    FFCore.ZScriptConsole
-		(
-			CConsoleLoggerEx::COLOR_RED |CConsoleLoggerEx::COLOR_INTENSITY | 
-				CConsoleLoggerEx::COLOR_BACKGROUND_BLACK,"ZQuest Creator I/O Error: %s\n", 
-		    "Failed to allocate timer fps callback!"
-		);
-		    */
-
 		Z_error("couldn't allocate timer");
 		quit_game();
 	    }
@@ -32383,12 +32169,7 @@ int main(int argc,char **argv)
 	    lock_dclick_function();
 	    install_int(dclick_check, 20);
     
-		//while(!quit && (--exittimer > 0))
-		//{
-			
-			
-		//}
-		//Z_error("Vid");
+		
 	    
 	        //The console requires the allegro process to exist, vefore it can lwaunch. 
 		//Let's hope that this doesn't create a magical memory leak, or thread issues.
@@ -32437,8 +32218,8 @@ int main(int argc,char **argv)
     center_zq_class_dialogs();
     center_zq_custom_dialogs();
     center_zq_files_dialogs();
-    center_zq_subscreen_dialogs();
-    center_zq_tiles_dialogs();
+    //center_zq_subscreen_dialogs();
+   // center_zq_tiles_dialogs();
     center_zquest_dialogs();
     
     screen2 = create_bitmap_ex(8,zq_screen_w,zq_screen_h);
@@ -32446,15 +32227,15 @@ int main(int argc,char **argv)
     menu1 = create_bitmap_ex(8,zq_screen_w,zq_screen_h);
     clear_bitmap(menu1);
     menu3 = create_bitmap_ex(8,zq_screen_w,zq_screen_h);
-    mapscreenbmp = create_bitmap_ex(8,16*(showedges?18:16),16*(showedges?13:11));
-    dmapbmp_small = create_bitmap_ex(8,65,33);
-    dmapbmp_large = create_bitmap_ex(8,(is_large?177:113),(is_large?81:57));
-    brushbmp = create_bitmap_ex(8,256*mapscreensize, 176*mapscreensize);
-    brushscreen = create_bitmap_ex(8,(256+(showedges?16:0))*mapscreensize, (176+(showedges?16:0))*mapscreensize);
-    tooltipbmp = create_bitmap_ex(8,256,256); // Decrease size at your own risk.
-    clear_bitmap(tooltipbmp);
+    //mapscreenbmp = create_bitmap_ex(8,16*(showedges?18:16),16*(showedges?13:11));
+    //dmapbmp_small = create_bitmap_ex(8,65,33);
+    //dmapbmp_large = create_bitmap_ex(8,(is_large?177:113),(is_large?81:57));
+    //brushbmp = create_bitmap_ex(8,256*mapscreensize, 176*mapscreensize);
+    //brushscreen = create_bitmap_ex(8,(256+(showedges?16:0))*mapscreensize, (176+(showedges?16:0))*mapscreensize);
+    //tooltipbmp = create_bitmap_ex(8,256,256); // Decrease size at your own risk.
+    //clear_bitmap(tooltipbmp);
     
-    if(!screen2 || !tmp_scr || !menu1 || !menu3 || !dmapbmp_large || !dmapbmp_large || !brushbmp || !brushscreen)// || !brushshadowbmp )
+    if(!screen2 || !tmp_scr || !menu1 || !menu3 )// || !brushshadowbmp )
     {
 
 	FFCore.ZScriptConsole
@@ -32922,37 +32703,6 @@ int main(int argc,char **argv)
     set_palette(RAMpal);
     clear_to_color(screen,vc(0));
     
-    //clear the midis (to keep loadquest from crashing by trying to destroy a garbage midi)
-    for(int i=0; i<MAXCUSTOMMIDIS_ZQ; ++i)
-    {
-        customtunes[i].data=NULL;
-    }
-    
-    for(int i=0; i<WAV_COUNT; i++)
-    {
-        customsfxdata[i].data=NULL;
-        sfx_string[i] = new char[36];
-        memset(sfx_string[i], 0, 36);
-    }
-    
-    for(int i=0; i<WPNCNT; i++)
-    {
-        weapon_string[i] = new char[64];
-        memset(weapon_string[i], 0, 64);
-    }
-    
-    for(int i=0; i<ITEMCNT; i++)
-    {
-        item_string[i] = new char[64];
-        memset(item_string[i], 0, 64);
-    }
-    
-    for(int i=0; i<eMAXGUYS; i++)
-    {
-        guy_string[i] = new char[64];
-        memset(guy_string[i], 0, 64);
-    }
-    
     for(int i=0; i<NUMSCRIPTFFC; i++)
     {
         ffscripts[i] = new script_data();
@@ -33076,58 +32826,6 @@ int main(int argc,char **argv)
         }
     }
     
-    if(!load_last_timed_save)
-    {
-        strcpy(filepath,get_config_string("zquest",last_quest_name,""));
-        
-        if(argc>1 && argv[1][0]!='-')
-        {
-            replace_extension(temppath,argv[1],"qst",2047);
-            int ret = load_quest(temppath,true,true);
-            
-            if(ret == qe_OK)
-            {
-                first_save=true;
-                strcpy(filepath,temppath);
-                refresh(rALL);
-            }
-        }
-        else if(OpenLastQuest&&filepath[0]&&exists(filepath)&&!used_switch(argc,argv,"-new"))
-        {
-            int ret = load_quest(filepath,true,true);
-            
-            if(ret == qe_OK)
-            {
-                first_save=true;
-                refresh(rALL);
-            }
-            else
-            {
-                filepath[0]=temppath[0]=0;
-                first_save=false;
-#ifdef ALLEGRO_MACOSX
-                sprintf(filepath, "../../../");
-                sprintf(temppath, "../");
-#endif
-            }
-        }
-        else
-        {
-            init_quest(NULL);
-            
-            if(RulesetDialog)
-                PickRuleset();
-                
-            //otherwise the blank quest gets the name of the last loaded quest... not good! -DD
-            filepath[0]=temppath[0]=0;
-            first_save=false;
-#ifdef ALLEGRO_MACOSX
-            sprintf(filepath, "../../../");
-            sprintf(temppath, "../");
-#endif
-        }
-    }
-    
     for(int x=0; x<MAXITEMS; x++)
     {
         lens_hint_item[x][0]=0;
@@ -33216,15 +32914,7 @@ int main(int argc,char **argv)
         
 #endif
         
-        check_autosave();
-        /*
-	if (!is_large) 
-	{
-		dialogs[0].dp = (void *) the_menu;
-	}
-	else
-		dialogs[0].dp = (void *) the_menu_large;
-        */
+        
         ++alignment_arrow_timer;
         
         if(alignment_arrow_timer>63)
@@ -33232,18 +32922,7 @@ int main(int argc,char **argv)
             alignment_arrow_timer=0;
         }
         
-        if(strcmp(catchall_string[Map.CurrScr()->room]," "))
-        {
-            static char ca_menu_str[40];
-            sprintf(ca_menu_str,"%s\tA",catchall_string[Map.CurrScr()->room]);
-            room_menu[3].text=ca_menu_str;
-            room_menu[3].flags=commands[cmdCatchall].flags=0;
-        }
-        else
-        {
-            room_menu[3].text=(char *)"Catch All\tA";
-            room_menu[3].flags=commands[cmdCatchall].flags=D_DISABLED;
-        }
+        
         
 	/* Notice: Adjust and Update these values if you hae modified any of the following, where
 		your modifications hae inserted or removed ANY entries. 
@@ -33265,73 +32944,7 @@ int main(int argc,char **argv)
                         
         file_menu[3].flags =
             commands[cmdSaveAs].flags = disable_saving ? D_DISABLED : 0;
-            
-        edit_menu[0].flags =
-            commands[cmdUndo].flags = Map.CanUndo() ? 0 : D_DISABLED;
-            
-        edit_menu[2].flags =
-            edit_menu[3].flags =
-                edit_menu[4].flags =
-                    edit_menu[5].flags =
-                        paste_menu[0].flags =
-                            paste_menu[1].flags =
-                                paste_item_menu[0].flags =
-                                    paste_item_menu[1].flags =
-                                        paste_item_menu[2].flags =
-                                            paste_item_menu[3].flags =
-                                                paste_item_menu[4].flags =
-                                                        paste_item_menu[5].flags =
-                                                                paste_item_menu[6].flags =
-                                                                        paste_item_menu[7].flags =
-                                                                                paste_item_menu[8].flags =
-                                                                                        paste_item_menu[9].flags =
-                                                                                                paste_item_menu[10].flags =
-                                                                                                        commands[cmdPaste].flags =
-                                                                                                                commands[cmdPasteAll].flags =
-                                                                                                                        commands[cmdPasteToAll].flags =
-                                                                                                                                commands[cmdPasteAllToAll].flags =
-                                                                                                                                        commands[cmdPasteUnderCombo].flags =
-                                                                                                                                                commands[cmdPasteSecretCombos].flags =
-                                                                                                                                                        commands[cmdPasteFFCombos].flags =
-                                                                                                                                                                commands[cmdPasteScreenData].flags =
-                                                                                                                                                                        commands[cmdPasteWarps].flags =
-                                                                                                                                                                                commands[cmdPasteWarpLocations].flags =
-                                                                                                                                                                                        commands[cmdPasteEnemies].flags =
-                                                                                                                                                                                                commands[cmdPasteRoom].flags =
-                                                                                                                                                                                                        commands[cmdPasteGuy].flags =
-                                                                                                                                                                                                                commands[cmdPasteDoors].flags =
-                                                                                                                                                                                                                        commands[cmdPasteLayers].flags = Map.CanPaste() ? 0 : D_DISABLED;
-                                                                                                                                                                                                                        
-        edit_menu[1].flags =
-            edit_menu[6].flags =
-                commands[cmdCopy].flags =
-                    commands[cmdDelete].flags = (Map.CurrScr()->valid&mVALID) ? 0 : D_DISABLED;
-                    
-        tool_menu[0].flags =
-            //data_menu[7].flags = //Allow setting doors on template screens > 0x82. -Z ( 24th March, 2019 )
-                commands[cmdTemplate].flags = (Map.getCurrScr()<TEMPLATE) ? 0 : D_DISABLED;
-                    
-	data_menu[7].flags = //Allow setting doors on template screens > 0x82. -Z ( 1st July, 2019 )
-		commands[cmdDoors].flags = (Map.getCurrScr()<0x88) ? 0 : D_DISABLED;
-		
-        defs_menu[1].flags =
-            commands[cmdDefault_Tiles].flags = 0;
-            
-        // Are some things selected?
-        view_menu[3].flags=(Flags&cWALK)?D_SELECTED:0; // Show Walkability
-        view_menu[4].flags=(Flags&cFLAGS)?D_SELECTED:0; // Show Flags
-        view_menu[5].flags=(Flags&cCSET)?D_SELECTED:0; // Show CSet
-        view_menu[6].flags=(Flags&cCTYPE)?D_SELECTED:0; // Show Type
-        view_menu[11].flags=(ShowGrid)?D_SELECTED:0; // Show Grid
-        view_menu[12].flags=(ViewLayer3BG)?D_SELECTED:0; // Show Grid
-        view_menu[13].flags=(ViewLayer2BG)?D_SELECTED:0; // Show Grid
-        view_menu[10].flags=(ShowFFScripts)?D_SELECTED:0; // Show Script Names
-        view_menu[9].flags=(ShowSquares)?D_SELECTED:0; // Show Squares
-        view_menu[8].flags=(!is_large)?D_DISABLED:(ShowInfo)?D_SELECTED:0; // Show Info
-        
-        maps_menu[1].flags=(Map.getCurrMap()<map_count && map_count>0) ? 0 : D_DISABLED;
-        maps_menu[2].flags=(Map.getCurrMap()>0)? 0 : D_DISABLED;
-        
+           
         etc_menu[4].flags=(isFullScreen()==1)?D_SELECTED:0;
         
         quit = !update_dialog(player2);
