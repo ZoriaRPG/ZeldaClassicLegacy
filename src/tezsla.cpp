@@ -6453,8 +6453,8 @@ void refresh(int flags)
          
     }
     
-     onCompileScript();
-    onExportZASM();
+     
+    //onExportZASM();
     
     
     scare_mouse();
@@ -6510,7 +6510,7 @@ void select_scr()
         }
         
         do_animations();
-        refresh(rALL);
+        return refresh(rALL);
     }
     
     ComboBrush=tempcb;
@@ -31788,7 +31788,7 @@ int main(int argc,char **argv)
 	}
 	else dialogs[0].dp = (void *) the_menu_large;
         */
-	
+	return onCompileScript();
     while(!quit)
     {
     
