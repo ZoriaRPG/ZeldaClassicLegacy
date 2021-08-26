@@ -1967,12 +1967,16 @@ static MENU media_menu[] =
 
 };
 
-
+static int onTeZSLa()
+{
+	return system("tezsla.exe");
+}
 
 //New ZScript Menu for 2.55 Alpha 16
 static MENU zscript_menu[] =
 {
 	{ (char *)"Compile &ZScript...",            onCompileScript,           NULL,                     0,            NULL   },
+	{ (char *)"Launch &TeZSLa...",              onTeZSLa,           NULL,                     0,            NULL   },
 	{ (char *)"&Assign Slots...",               onSlotAssign,              NULL,                     0,            NULL   },
 	//divider	
 	{ (char *)"",                               NULL,                      NULL,                     0,            NULL   },

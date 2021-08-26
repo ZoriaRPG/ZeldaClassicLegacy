@@ -29651,7 +29651,7 @@ int main(int argc,char **argv)
     loadpng_init();
     
     //set_config_file("ag.cfg");
-    set_config_file("zquest.cfg");
+    set_config_file("teszla.cfg");
     if(install_timer() < 0)
     {
 
