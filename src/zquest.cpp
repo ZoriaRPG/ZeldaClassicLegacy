@@ -1303,6 +1303,68 @@ static int do_OpenQuest()
     return onOpen();
 }
 
+void write_tezsla_rules(const char *filename)
+{
+	int scratch = 0;
+	PACKFILE *f = pack_fopen_password(filename,F_WRITE, "");
+	if (f)
+	{
+		p_iputl(V_RULES,f);
+		p_iputl(QUESTRULES_NEW_SIZE,f);
+		
+		for (int q = 0; q < 8; ++q ) p_iputl(scratch,f);
+		for (int q = 0; q < QUESTRULES_NEW_SIZE; ++q ) p_putc(quest_rules[q],f);
+		pack_fclose(f);
+	}
+	
+	
+}
+
+int read_tezsla_rules(const char *filename)
+{
+	int vers = 0;
+	int sz = 0;
+	int padding[8] = {0};
+	unsigned char therules[QUESTRULES_NEW_SIZE];
+	PACKFILE *f = pack_fopen_password(filename,F_READ, "");
+	if (f)
+	{
+		if(!p_igetl(&vers,f,true))
+		{
+			return 1;
+		}
+		if(!p_igetl(&sz,f,true))
+		{
+			return 1;
+		}
+		for (int q = 0; q < 8; ++q ) 
+		{
+			if(!p_igetl(&sz,f,true))
+			{
+				return 2;
+			}
+		}
+		for (int q = 0; q < QUESTRULES_NEW_SIZE; ++q ) 
+		{
+			
+			if(!p_getc(&therules[q],f,true))
+			{
+				return 3;
+			}
+		}
+		for (int q = 0; q < QUESTRULES_NEW_SIZE; ++q ) 
+		{
+			quest_rules[q] = therules[q];
+			return 0;
+		}
+		pack_fclose(f);
+	}
+	return -1;
+	
+}
+	
+
+
 static int do_NewQuest()
 {
     //clear the panel recent screen buttons to prevent crashes from invalid maps
@@ -1969,9 +2031,20 @@ static MENU media_menu[] =
 
 static int onTeZSLa()
 {
-	return system("tezsla.exe");
+	write_tezsla_rules("TeZSLa.rules");
+	//do
+	//{
+	//	;;
+	//}
+	//while(!fileexists("TeZSLa.rules"));
+	//return system("tezsla.exe");
+	int ret = system("tezsla.exe -i buffer.zs -r tezsla.rules"); //need specific fienaes here which must be provided
+	//buffer file must be dumped and specified ese crash-poo --Z
+	al_trace("TeZSLa Sste Call Returned %d\n", ret);
+	return ret;
+	//return system("tezsla.exe -i buffer.zs -r tezsla.rules"); //need specific fienaes here which must be provided
+	//buffer file must be dumped and specified ese crash-poo --Z
 }
-
 //New ZScript Menu for 2.55 Alpha 16
 static MENU zscript_menu[] =
 {
