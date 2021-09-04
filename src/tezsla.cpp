@@ -1078,6 +1078,12 @@ std::vector<string> ascomboscripts;
 
 char ZQincludePaths[MAX_INCLUDE_PATHS][512];
 
+char *infile=NULL;
+char *outfile=NULL;
+char *settingfile=NULL;
+char *rulesfile=NULL;
+int compiletime_settings[256] ={0};
+
 int CSET_SIZE = 16;
 int CSET_SHFT = 4;
 //editbox_data temp_eb_data;
@@ -29651,7 +29657,7 @@ int main(int argc,char **argv)
     loadpng_init();
     
     //set_config_file("ag.cfg");
-    set_config_file("teszla.cfg");
+    set_config_file("zquest.cfg");
     if(install_timer() < 0)
     {
 
@@ -30398,7 +30404,95 @@ int main(int argc,char **argv)
     //We need to remove all of the zeldadx refs to the config file for zquest. 
     
     set_keyboard_rate(KeyboardRepeatDelay,KeyboardRepeatRate);
-    
+    int argcount = 0;
+    al_trace("found %d args\n",argc);
+    //input files, iutpout file, options : Reeber to add file valid checks
+    if (used_switch(argc, argv, "-i"))
+    {
+	al_trace("input file arg found\n"); 
+	
+	int infileid=used_switch(argc, argv, "-i");
+
+	if(infileid==argc-1)
+	{
+	    Z_error("-i input file not specifed\n");
+	    exit(0);
+	}
+	else
+	{
+		infile=argv[infileid+1];
+		al_trace("-i input file is %s\n",infile);
+	}
+     }
+     else 
+     {
+	     infile = "TMP";
+	     al_trace("Unspecified input file is %s\n",infile);
+     }
+     if (used_switch(argc, argv, "-o"))
+     {
+	al_trace("output file arg found\n");
+	
+	int outfileid=used_switch(argc, argv, "-o");
+
+	if(outfileid==argc-1)
+	{
+	    Z_error("-o output file not specifed\n");
+	    exit(0);
+	}
+	else 
+	{
+		outfile=argv[outfileid+1];
+		al_trace("-o output file is %s\n",outfile);
+	}
+    }
+    else 
+     {
+	     outfile = "TeZSLa.output";
+	     al_trace("Unspecified input file is %s\n",outfile);
+     }
+    if(used_switch(argc, argv, "-r"))
+    {
+	al_trace("rules file arg found\n");
+	int rulefileid=used_switch(argc, argv, "-r");
+	if(rulefileid==argc-1)
+	{
+	    Z_error("-r rules file not specifed\n");
+	    exit(0);
+	}
+	else 
+	{
+		rulesfile=argv[rulefileid+1];
+		al_trace("-r rules file is %s\n",rulesfile);
+	}
+    }
+    else 
+     {
+	     rulesfile = "TeZSLa.rules";
+	     al_trace("Unspecified input file is %s\n",rulesfile);
+     }
+    if(used_switch(argc, argv, "-s"))
+    {
+	al_trace("settings file arg found\n");
+	int settingfileid=used_switch(argc, argv, "-s");
+	if(settingfileid==argc-1)
+	{
+	    Z_error("-s settings file not specifed\n");
+	    exit(0);
+	}
+	else 
+	{
+		settingfile=argv[settingfileid+1	];
+		al_trace("-s settings file is %s\n",settingfile);
+	}
+    }
+    else 
+     {
+	     settingfile = "TeZSLa.settings";
+	     al_trace("Unspecified input file is %s\n",settingfile);
+     }    
+	//hand settings
+
     if(used_switch(argc,argv,"-small") || UseSmall==1)
     {
         is_large=false;
@@ -34854,7 +34948,7 @@ const char defaultCustomComboAttributes[20][4][17]=
 bool ZModule::init(bool d) //bool default
 {
 	
-	
+
 	memset(moduledata.module_name, 0, sizeof(moduledata.module_name));
 	memset(moduledata.quests, 0, sizeof(moduledata.quests));
 	memset(moduledata.skipnames, 0, sizeof(moduledata.skipnames));
