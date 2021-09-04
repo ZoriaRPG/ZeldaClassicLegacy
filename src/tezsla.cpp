@@ -24539,6 +24539,22 @@ int onCompileScript()
 	{
 		compile_dlg[9].flags &= ~D_SELECTED;
 	}
+	//Load from File
+	zScript.clear();
+	FILE *zscript = fopen(infile,"r");
+	if(zscript == NULL)
+	{
+		jwin_alert("Error","Cannot open specified file!",NULL,NULL,"O&K",NULL,'k',0,lfont);
+	}
+
+	char c = fgetc(zscript);
+
+	while(!feof(zscript))
+	{
+		zScript += c;
+		c = fgetc(zscript);
+	}
+	//fclose(zscript);
 	
 	if(is_large)
 		large_dialog(compile_dlg);
@@ -24638,12 +24654,19 @@ int onCompileScript()
 			#endif
 			//need elseif for linux here! -Z
 			//Compile!
-			FILE *tempfile = fopen("tmp","w");
+			FILE *tempfile = fopen("tmp","w"); 
+			//FILE *tempfile = NULL;
+			//tempfile = fopen("tmp","w"); 
 			
 			if(!tempfile)
 			{
-				jwin_alert("Error","Unable to create a temporary file in current directory!",NULL,NULL,"O&K",NULL,'k',0,lfont);
-				return D_O_K;
+				//al_trace("Could not read input file: %s\n",infile); 
+				//tempfile = fopen("tmp","w"); 
+				//if(!tempfile)
+				//{
+					jwin_alert("Error","Unable to create a temporary file in current directory!",NULL,NULL,"O&K",NULL,'k',0,lfont);
+					return D_O_K;
+				//}
 			}
 			
 			fwrite(zScript.c_str(), sizeof(char), zScript.size(), tempfile);
