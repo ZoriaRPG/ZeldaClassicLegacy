@@ -1248,7 +1248,7 @@ static const char months[13][13] =
 	"Nonetober", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 };
 
-bool is_string_commandcomp(int command)
+static bool is_string_commandcomp(int command)
 {
     command = command;
     return false;
@@ -1558,7 +1558,7 @@ static int write_one_ffscript_data(PACKFILE *f, int i, script_data **script)
 
 static int writeffscripts(const char *filename)
 {
-	PACKFILE *f = pack_fopen_password(outfile,F_WRITE, "");
+	PACKFILE *f = pack_fopen_password(filename,F_WRITE, "");
 	if (f)
 	{
 		    dword section_id       = ID_FFSCRIPT;
@@ -2169,7 +2169,7 @@ static int writeffscripts(const char *filename)
 
 static int readffscripts(const char *filename, bool keepdata=true)
 {
-    PACKFILE *f = pack_fopen_password(outfile,F_WRITE, "filename");
+    PACKFILE *f = pack_fopen_password(filename,F_WRITE, "filename");
     if (f)
     {
 		    int dummy;
