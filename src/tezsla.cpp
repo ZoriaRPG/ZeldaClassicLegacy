@@ -1256,7 +1256,7 @@ bool is_string_commandcomp(int command)
 
 // Do not encode! PACKFILE *f = pack_fopen_password(filename,compressed?F_WRITE_PACKED:F_WRITE, compressed ? datapwd : "");
 
-int read_one_ffscript_data(PACKFILE *f, bool keepdata, int , word s_version, word , script_data **script, word zmeta_version)
+static int read_one_ffscript_data(PACKFILE *f, bool keepdata, int , word s_version, word , script_data **script, word zmeta_version)
 {
 
     //Please also update loadquest() when modifying this method -DD
@@ -1423,7 +1423,7 @@ int read_one_ffscript_data(PACKFILE *f, bool keepdata, int , word s_version, wor
 
 
 
-int write_one_ffscript_data(PACKFILE *f, int i, script_data **script)
+static int write_one_ffscript_data(PACKFILE *f, int i, script_data **script)
 {
     //these are here to bypass compiler warnings about unused arguments
     i=i;
@@ -1556,7 +1556,7 @@ int write_one_ffscript_data(PACKFILE *f, int i, script_data **script)
 }
 
 
-int writeffscripts(const char *filename)
+static int writeffscripts(const char *filename)
 {
 	PACKFILE *f = pack_fopen_password(outfile,F_WRITE, "");
 	if (f)
@@ -2167,7 +2167,7 @@ int writeffscripts(const char *filename)
 
 
 
-int readffscripts(const char *filename, bool keepdata=true)
+static int readffscripts(const char *filename, bool keepdata=true)
 {
     PACKFILE *f = pack_fopen_password(outfile,F_WRITE, "filename");
     if (f)
