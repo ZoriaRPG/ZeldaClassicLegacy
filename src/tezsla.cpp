@@ -26102,7 +26102,7 @@ int onCompileScript()
 		case 0:
 		case 1:
 			//Cancel
-			return D_O_K;
+			//return -9; //This checks: Z ees thisvauein the syste() call andths can be used for eror codes &c--Z
 			
 		case 2:
 			//Edit
@@ -26402,6 +26402,8 @@ int onCompileScript()
 			//assign scripts to slots
 			if(do_slots(scripts))
 			{
+				int suc = writeffscripts(outfile);
+				return suc;
 				//Success
 			}
 			else
@@ -26430,7 +26432,6 @@ int onCompileScript()
 			//std::map<string, disassembled_script_data>().swap(scripts); //Doesn't release it back to Windows. 
 			//malloc_trim(); //This is Unix only, and will release heap memory allocation back to the host OS
 			
-			writeffscripts(outfile);
 			return D_O_K;
 		}
 	}
