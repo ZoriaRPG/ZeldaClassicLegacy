@@ -1035,6 +1035,20 @@ FFScript FFCore;
 ZModule zcm;
 zcmodule moduledata;
 
+
+
+enum optiontpyes 
+{
+	ot_NO_LOGGING, ot_TRUNCATE_DIVISION_BY_LITERAL_BUG, ot_SHORT_CIRCUIT, ot_BOOL_TRUE_RETURN_DECIMAL, 
+	ot_HEADER_GUARD, ot_NO_ERROR_HALT, ot_TRUE_INT_SIZE, ot_FORCE_INLINE, ot_BINARY_32BIT, ot_APPROX_EQUAL_MARGIN, 
+	ot_STRING_SWITCH_CASE_INSENSITIVE,
+	ot_LAST
+};
+
+
+float compileroptions[ot_LAST]={(zfix)0};
+	
+
 void do_previewtext();
 bool do_slots(std::map<std::string, disassembled_script_data> &scripts);
 void do_script_disassembly(std::map<string, disassembled_script_data>& scripts, bool fromCompile);
@@ -32041,7 +32055,7 @@ int main(int argc,char **argv)
 	}
 	else 
 	{
-		settingfile=argv[settingfileid+1	];
+		settingfile=argv[settingfileid+1];
 		al_trace("-s settings file is %s\n",settingfile);
 	}
     }
@@ -32052,6 +32066,110 @@ int main(int argc,char **argv)
      }    
 	//hand settings
 
+    if(used_switch(argc, argv, "-logging"))
+    {
+	int arg=used_switch(argc, argv, "-logging");
+	int val = atoi(argv[arg+1]);
+	al_trace("logging arg %d found\n", val);
+	{
+		compileroptions[ot_NO_LOGGING]=val;
+	}
+    } 
+    if(used_switch(argc, argv, "-division"))
+    {
+	int arg=used_switch(argc, argv, "-division");
+	int val = atoi(argv[arg+1]);
+	al_trace("division arg %d found\n", val);
+	{
+		compileroptions[ot_TRUNCATE_DIVISION_BY_LITERAL_BUG]=val;
+	}
+    }
+    
+    if(used_switch(argc, argv, "-short"))
+    {
+	int arg=used_switch(argc, argv, "-short");
+	int val = atoi(argv[arg+1]);
+	al_trace("short circuit arg %d found\n", val);
+	{
+		compileroptions[ot_SHORT_CIRCUIT]=val;
+	}
+    }
+    
+    if(used_switch(argc, argv, "-truedec"))
+    {
+	int arg=used_switch(argc, argv, "-truedec");
+	int val = atoi(argv[arg+1]);
+	al_trace("true decimal arg %d found\n", val);
+	{
+		compileroptions[ot_BOOL_TRUE_RETURN_DECIMAL]=val;
+	}
+    }
+    
+    if(used_switch(argc, argv, "-hguard"))
+    {
+	int arg=used_switch(argc, argv, "-hguard");
+	int val = atoi(argv[arg+1]);
+	al_trace("header guard arg %d found\n", val);
+	{
+		compileroptions[ot_HEADER_GUARD]=val;
+	}
+    }
+    
+    if(used_switch(argc, argv, "-halt"))
+    {
+	int arg=used_switch(argc, argv, "-halt");
+	int val = atoi(argv[arg+1]);
+	al_trace("error halt arg %d found\n", val);
+	{
+		compileroptions[ot_NO_ERROR_HALT]=val;
+	}
+    }
+    if(used_switch(argc, argv, "-trueint"))
+    {
+	int arg=used_switch(argc, argv, "-trueint");
+	int val = atoi(argv[arg+1]);
+	al_trace("true int arg %d found\n", val);
+	{
+		compileroptions[ot_TRUE_INT_SIZE]=val;
+	}
+    }
+    if(used_switch(argc, argv, "-inline"))
+    {
+	int arg=used_switch(argc, argv, "-inline");
+	int val = atoi(argv[arg+1]);
+	al_trace("inline arg %d found\n", val);
+	{
+		compileroptions[ot_FORCE_INLINE]=val;
+	}
+    }
+    if(used_switch(argc, argv, "-32b"))
+    {
+	int arg=used_switch(argc, argv, "-32b");
+	int val = atoi(argv[arg+1]);
+	al_trace("32b binary arg %d found\n", val);
+	{
+		compileroptions[ot_BINARY_32BIT]=val;
+	}
+    }
+    if(used_switch(argc, argv, "-margin"))
+    {
+	int arg=used_switch(argc, argv, "-margin");
+	float val =uatof(argv[arg+1]);
+	al_trace("Appx/Eq margin arg %f found\n", val);
+	{
+		compileroptions[ot_APPROX_EQUAL_MARGIN]=val;
+	}
+    }
+    if(used_switch(argc, argv, "-caseins"))
+    {
+	int arg=used_switch(argc, argv, "-caseins");
+	float val = uatof(argv[arg+1]);
+	al_trace("String Case Sens arg %f found\n", val);
+	{
+		compileroptions[ot_STRING_SWITCH_CASE_INSENSITIVE]=val;
+	}
+    }
+    
     if(used_switch(argc,argv,"-small") || UseSmall==1)
     {
         is_large=false;
