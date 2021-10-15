@@ -149,6 +149,8 @@ sprite::sprite()
 	    initA[q] = 0;
 	    weap_inita[q] = 0;
     }
+	glowRad = 0;
+	glowShape = 0;
 }
 
 sprite::sprite(sprite const & other):
@@ -220,7 +222,9 @@ fallCombo(other.fallCombo),
 old_cset(other.old_cset),
 drownclk(other.drownclk),
 drownCombo(other.drownCombo),
-do_animation(other.do_animation)
+do_animation(other.do_animation),
+glowRad(other.glowRad),
+glowShape(other.glowShape)
 
 {
     uid = getNextUID();
@@ -345,6 +349,8 @@ sprite::sprite(zfix X,zfix Y,int T,int CS,int F,int Clk,int Yofs):
         weap_inita[q] = 0;
     }
     memset(stack, 0xFFFF, sizeof(stack));
+	glowRad = 0;
+	glowShape = 0;
 }
 
 sprite::~sprite()
@@ -1038,6 +1044,8 @@ bool sprite::runKnockback()
 //To quote Jeff Goldblum, 'That is one big pile opf shit!'. -Z (5th April, 2019)
 void sprite::draw(BITMAP* dest)
 {
+	//Handle glowing sprites
+	handle_sprlighting();
 	if(!show_sprites)
 	{
 		return;
@@ -1066,9 +1074,9 @@ void sprite::draw(BITMAP* dest)
 	isspawning = false;
 	if(clk>=0)
 	{
+		BITMAP *temp = NULL;
 		switch(e)
 		{
-			BITMAP *temp;
             
 			case 1:
 				temp = create_bitmap_ex(8,16,32);
@@ -1117,8 +1125,8 @@ void sprite::draw(BITMAP* dest)
 					else masked_blit(temp, dest, 0, 0, sx, sy-16, 16, 32);
 				}
 				//clean-up
-				if ( sprBMP2 ) destroy_bitmap(sprBMP2);
-				destroy_bitmap(temp);
+				sane_destroy_bitmap(&sprBMP2);
+				sane_destroy_bitmap(&temp);
 				break;
             
 			case 2:
@@ -1180,8 +1188,8 @@ void sprite::draw(BITMAP* dest)
 				}
 					
 				
-				destroy_bitmap(sprBMP2);
-				destroy_bitmap(temp);
+				sane_destroy_bitmap(&sprBMP2);
+				sane_destroy_bitmap(&temp);
 				break;
             
 			case 3:
@@ -1232,8 +1240,8 @@ void sprite::draw(BITMAP* dest)
 							else draw_sprite(dest, sprBMP, sx, sy);
 						}
 							
-						destroy_bitmap(sprBMP);
-						destroy_bitmap(sprBMP2);
+						sane_destroy_bitmap(&sprBMP);
+						sane_destroy_bitmap(&sprBMP2);
 					} //end extend == 3 && flip == 1
 					break;
                 
@@ -1280,8 +1288,8 @@ void sprite::draw(BITMAP* dest)
 							else draw_sprite(dest, sprBMP, sx, sy);
 						}
 							
-						destroy_bitmap(sprBMP);
-						destroy_bitmap(sprBMP2);
+						sane_destroy_bitmap(&sprBMP);
+						sane_destroy_bitmap(&sprBMP2);
 					}//end extend == 3 &7 flip == 2
 					break;
                 
@@ -1328,8 +1336,8 @@ void sprite::draw(BITMAP* dest)
 							else draw_sprite(dest, sprBMP, sx, sy);
 						}
 							
-						destroy_bitmap(sprBMP);
-						destroy_bitmap(sprBMP2);
+						sane_destroy_bitmap(&sprBMP);
+						sane_destroy_bitmap(&sprBMP2);
 					} //end extend == 3 && flip == 3
 					break;
                 
@@ -1380,8 +1388,8 @@ void sprite::draw(BITMAP* dest)
 							else draw_sprite(dest, sprBMP, sx, sy);
 						}
 						
-						destroy_bitmap(sprBMP);
-						destroy_bitmap(sprBMP2);
+						sane_destroy_bitmap(&sprBMP);
+						sane_destroy_bitmap(&sprBMP2);
                 
 						break;
 					} //end extend == 0 && flip == 3
@@ -1428,8 +1436,8 @@ void sprite::draw(BITMAP* dest)
 						}
 						else draw_sprite(dest, sprBMP, sx, sy);
 					}
-					if ( sprBMP ) destroy_bitmap(sprBMP);
-					if ( sprBMP2 ) destroy_bitmap(sprBMP2);
+					sane_destroy_bitmap(&sprBMP);
+					sane_destroy_bitmap(&sprBMP2);
 					break;
 				}
 			} //end extend == 3, and also extend == 0. Why? Because someone was more mental, than me. -Z (5th April, 2019)
@@ -1437,7 +1445,7 @@ void sprite::draw(BITMAP* dest)
 			if ( temp ) 
 			{
 				//if there is still somehow data in the temp bitmap
-				destroy_bitmap(temp);
+				sane_destroy_bitmap(&temp);
 			}
 		}
 	} //end if(clk>=0)
@@ -1521,11 +1529,7 @@ void sprite::draw(BITMAP* dest)
 	if(show_hitboxes && !is_zquest())
 		rect(dest,x+hxofs,y+playing_field_offset+hyofs-(z+zofs),x+hxofs+hxsz-1,(y+playing_field_offset+hyofs+hysz-(z+zofs))-1,vc((id+16)%255));
 
-	if ( sprBMP2 ) 
-	{
-		//if there is still somehow data in the scaling bitmap
-		destroy_bitmap(sprBMP2);
-	}
+	sane_destroy_bitmap(&sprBMP2);
 	
 }
 
@@ -1548,9 +1552,9 @@ void sprite::drawzcboss(BITMAP* dest)
     
     if(clk>=0)
     {
+		BITMAP *temp = NULL;
         switch(e)
         {
-            BITMAP *temp;
             
         case 1:
             temp = create_bitmap_ex(8,16,32);
@@ -1602,7 +1606,7 @@ void sprite::drawzcboss(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 0, 0, sx, sy-16, 16, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 2:
@@ -1682,7 +1686,7 @@ void sprite::drawzcboss(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 8, 0, sx-8, sy-16, 32, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 3:
@@ -1891,9 +1895,9 @@ void sprite::old_draw(BITMAP* dest)
     int flip_type = ((scriptflip > -1) ? scriptflip : flip);
     if(clk>=0)
     {
+		BITMAP *temp = NULL;
         switch(e)
         {
-            BITMAP *temp;
             
         case 1:
             temp = create_bitmap_ex(8,16,32);
@@ -1918,7 +1922,7 @@ void sprite::old_draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 0, 0, sx, sy-16, 16, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 2:
@@ -1956,7 +1960,7 @@ void sprite::old_draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 8, 0, sx-8, sy-16, 32, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 3:
@@ -2208,9 +2212,9 @@ void sprite::draw(BITMAP* dest)
     
     if(clk>=0)
     {
+		BITMAP *temp = NULL;
         switch(e)
         {
-            BITMAP *temp;
             
         case 1:
             temp = create_bitmap_ex(8,16,32);
@@ -2235,7 +2239,7 @@ void sprite::draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 0, 0, sx, sy-16, 16, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 2:
@@ -2273,7 +2277,7 @@ void sprite::draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 8, 0, sx-8, sy-16, 32, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 3:
@@ -2463,9 +2467,9 @@ void sprite::old_draw(BITMAP* dest)
     
     if(clk>=0)
     {
+		BITMAP *temp = NULL;
         switch(e)
         {
-            BITMAP *temp;
             
         case 1:
             temp = create_bitmap_ex(8,16,32);
@@ -2490,7 +2494,7 @@ void sprite::old_draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 0, 0, sx, sy-16, 16, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 2:
@@ -2528,7 +2532,7 @@ void sprite::old_draw(BITMAP* dest)
             }
             
             masked_blit(temp, dest, 8, 0, sx-8, sy-16, 32, 32);
-            destroy_bitmap(temp);
+            sane_destroy_bitmap(&temp);
             break;
             
         case 3:

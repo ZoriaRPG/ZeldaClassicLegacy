@@ -533,7 +533,7 @@ long CConsoleLogger::Create(const char	*lpszWindowTitle/*=NULL*/,
 	if (!logger_name)
 	{	// no name was give , create name based on the current address+time
 		// (you can modify it to use PID , rand() ,...
-		unsigned long now = GetTickCount();
+		unsigned long now = GetTickCount64();
 		logger_name = m_name+ strlen(m_name);
 		sprintf((char*)logger_name,"logger%d_%lu",(int)this,now);
 	}
@@ -1182,7 +1182,7 @@ int FFScript::UpperToLower(std::string *s)
 		Z_scripterrlog("String passed to UpperToLower() is too small. Size is: %d \n", s->size());
 		return 0;
 	}
-	for ( unsigned int q = 0; q < s->size(); ++q )
+	for ( size_t q = 0; q < s->size(); ++q )
 	{
 		//if ( s->at(q) >= 'A' || s->at(q) <= 'Z' )
 		//{
@@ -1200,7 +1200,7 @@ int FFScript::LowerToUpper(std::string *s)
 		Z_scripterrlog("String passed to LowerToUpper() is too small. Size is: %d \n", s->size());
 		return 0;
 	}
-	for ( unsigned int q = 0; q < s->size(); ++q )
+	for ( size_t q = 0; q < s->size(); ++q )
 	{
 		//if ( s->at(q) >= 'a' || s->at(q) <= 'z' )
 		//{
@@ -1218,7 +1218,7 @@ int FFScript::ConvertCase(std::string *s)
 		Z_scripterrlog("String passed to UpperToLower() is too small. Size is: %d \n", s->size());
 		return 0;
 	}
-	for ( unsigned int q = 0; q < s->size(); ++q )
+	for ( size_t q = 0; q < s->size(); ++q )
 	{
 		if ( s->at(q) >= 'a' || s->at(q) <= 'z' )
 		{
@@ -1601,6 +1601,7 @@ void FFScript::initZScriptItemScripts()
 //           New Mapscreen Flags Tools           //
 ///----------------------------------------------//
 
+/*
 void FFScript::set_mapscreenflag_state(mapscr *m, int flagid, bool state)
 {
 	switch(flagid)
@@ -1746,18 +1747,16 @@ void FFScript::set_mapscreenflag_state(mapscr *m, int flagid, bool state)
 		case MSF_MIDAIR: 
 		{ //FIX ME!
 			//! What the ever love of fuck mate?!
-			/*
-			byte *f2 = &(m->flags2);
-			f2 >>=4;
-			int f = 0;
-			f<<=1;
-			f |= state ? 1:0;
-			m->flags2 &= 0x0F;
-			m->flags2 |= f<<4;
+			// byte *f2 = &(m->flags2);
+			// f2 >>=4;
+			// int f = 0;
+			// f<<=1;
+			// f |= state ? 1:0;
+			// m->flags2 &= 0x0F;
+			// m->flags2 |= f<<4;
 			//if ( state )
 			//	(m->flags2>>4) |= 2;
 			//else (m->flags2>>4) &= ~2;
-			*/
 			break;
 		}
 		case MSF_CYCLEINIT: 
@@ -2169,7 +2168,7 @@ long FFScript::get_mapscreenflag_state(mapscr *m, int flagid)
 		}
 	}
 }
-
+*/
 //ScriptHelper
 class SH
 {
@@ -2259,7 +2258,7 @@ long get_screenflags(mapscr *m, int flagset)
 	case 1: // View
 		f = ornextflag(m->flags3&8)  | ornextflag(m->flags7&16) | ornextflag(m->flags3&16)
 			| ornextflag(m->flags3&64) | ornextflag(m->flags7&2)  | ornextflag(m->flags7&1)
-			| ornextflag(m->flags&4);
+			| ornextflag(m->flags&fDARK) | ornextflag(m->flags9&fDARK_DITHER) | ornextflag(m->flags9&fDARK_TRANS);
 		break;
 		
 	case 2: // Secrets
@@ -4748,6 +4747,27 @@ long get_register(const long arg)
 			}
 			break;
 		}
+		
+		case ITEMGLOWRAD:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				ret = ((item*)(s))->glowRad * 10000;
+			}
+			break;
+			
+		case ITEMGLOWSHP:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				ret = ((item*)(s))->glowShape * 10000;
+			}
+			break;
+			
+		case ITEMDIR:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				ret = ((item*)(s))->dir * 10000;
+			}
+			break;
 			
 		///----------------------------------------------------------------------------------------------------//
 		//Itemdata Variables
@@ -5830,6 +5850,20 @@ long get_register(const long arg)
 			break;
 		}
 		
+		case NPCGLOWRAD:
+			if(GuyH::loadNPC(ri->guyref, "npc->LightRadius") == SH::_NoError)
+			{
+				ret = GuyH::getNPC()->glowRad * 10000;
+			}
+			break;
+			
+		case NPCGLOWSHP:
+			if(GuyH::loadNPC(ri->guyref, "npc->LightShape") == SH::_NoError)
+			{
+				ret = GuyH::getNPC()->glowShape * 10000;
+			}
+			break;
+		
 		
 		
 		///----------------------------------------------------------------------------------------------------//
@@ -6236,7 +6270,20 @@ long get_register(const long arg)
 			}
 			break;
 		}
-
+		
+		case LWPNGLOWRAD:
+			if(0!=(s=checkLWpn(ri->lwpn,"LightRadius")))
+			{
+				ret = ((weapon*)(s))->glowRad * 10000;
+			}
+			break;
+			
+		case LWPNGLOWSHP:
+			if(0!=(s=checkLWpn(ri->lwpn,"LightShape")))
+			{
+				ret = ((weapon*)(s))->glowShape * 10000;
+			}
+			break;
 			
 		///----------------------------------------------------------------------------------------------------//
 		//EWeapon Variables
@@ -6619,6 +6666,20 @@ long get_register(const long arg)
 			}
 			break;
 		}
+		
+		case EWPNGLOWRAD:
+			if(0!=(s=checkEWpn(ri->ewpn,"LightRadius")))
+			{
+				ret = ((weapon*)(s))->glowRad * 10000;
+			}
+			break;
+			
+		case EWPNGLOWSHP:
+			if(0!=(s=checkEWpn(ri->ewpn,"LightShape")))
+			{
+				ret = ((weapon*)(s))->glowShape * 10000;
+			}
+			break;
 		
 		/*
 		case LWEAPONSCRIPTUID:
@@ -12588,6 +12649,27 @@ void set_register(const long arg, const long value)
 			}
 			break;
 		}
+		
+		case ITEMGLOWRAD:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				((item*)(s))->glowRad = vbound(value/10000,0,255);
+			}
+			break;
+			
+		case ITEMGLOWSHP:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				((item*)(s))->glowShape = vbound(value/10000,0,255);
+			}
+			break;
+			
+		case ITEMDIR:
+			if(0!=(s=checkItem(ri->itemref)))
+			{
+				((item*)(s))->dir=(value/10000);
+			}
+			break;
 			
 	///----------------------------------------------------------------------------------------------------//
 	//Itemdata Variables
@@ -13401,6 +13483,20 @@ void set_register(const long arg, const long value)
 			}
 			break;
 		}
+		
+		case LWPNGLOWRAD:
+			if(0!=(s=checkLWpn(ri->lwpn,"LightRadius")))
+			{
+				((weapon*)(s))->glowRad = vbound(value/10000,0,255);
+			}
+			break;
+			
+		case LWPNGLOWSHP:
+			if(0!=(s=checkLWpn(ri->lwpn,"LightShape")))
+			{
+				((weapon*)(s))->glowShape = vbound(value/10000,0,255);
+			}
+			break;
 			
 	///----------------------------------------------------------------------------------------------------//
 	//EWeapon Variables
@@ -13776,6 +13872,19 @@ void set_register(const long arg, const long value)
 			}
 			break;
 		}
+		
+		case EWPNGLOWRAD:
+			if(0!=(s=checkEWpn(ri->ewpn,"LightRadius")))
+			{
+				((weapon*)(s))->glowRad = vbound(value/10000,0,255);
+			}
+			break;
+		case EWPNGLOWSHP:
+			if(0!=(s=checkEWpn(ri->ewpn,"LightShape")))
+			{
+				((weapon*)(s))->glowShape = vbound(value/10000,0,255);
+			}
+			break;
 			
 	///----------------------------------------------------------------------------------------------------//
 	//NPC Variables
@@ -14545,6 +14654,19 @@ void set_register(const long arg, const long value)
 			}
 			break;
 		}
+		
+		case NPCGLOWRAD:
+			if(GuyH::loadNPC(ri->guyref, "npc->LightRadius") == SH::_NoError)
+			{
+				GuyH::getNPC()->glowRad = vbound(value/10000,0,255);
+			}
+			break;
+		case NPCGLOWSHP:
+			if(GuyH::loadNPC(ri->guyref, "npc->LightShape") == SH::_NoError)
+			{
+				GuyH::getNPC()->glowShape = vbound(value/10000,0,255);
+			}
+			break;
 		
 		
 	///----------------------------------------------------------------------------------------------------//
@@ -27154,10 +27276,10 @@ void FFScript::do_file_writebytes()
 {
 	if(user_file* f = checkFile(ri->fileref, "WriteBytes()", true))
 	{
-		int pos = zc_max(ri->d[rINDEX] / 10000,0);
-		int count = get_register(sarg2) / 10000;
-		if(count == 0) return;
-		if(count == -1 || count > (MAX_ZC_ARRAY_SIZE-pos)) count = MAX_ZC_ARRAY_SIZE-pos;
+		unsigned int pos = zc_max(ri->d[rINDEX] / 10000,0);
+		int arg = get_register(sarg2) / 10000;
+		if(arg == 0) return;
+		unsigned int count = ((arg<0 || unsigned(arg) >(MAX_ZC_ARRAY_SIZE - pos)) ? MAX_ZC_ARRAY_SIZE - pos : unsigned(arg));
 		long arrayptr = get_register(sarg1) / 10000;
 		string output;
 		ZScriptArray& a = getArray(arrayptr);
@@ -27172,7 +27294,7 @@ void FFScript::do_file_writebytes()
 		}
 		if(count < 0 || unsigned(count) > a.Size()-pos) count = a.Size()-pos;
 		std::vector<unsigned char> data(count);
-		for(int q = 0; q < count; ++q)
+		for(unsigned int q = 0; q < count; ++q)
 		{
 			data[q] = a[q+pos] / 10000;
 		}
@@ -31928,7 +32050,7 @@ void FFScript::initIncludePaths()
 	al_trace("\n");
 	updateIncludePaths();
 
-	for ( int q = 0; q < includePaths.size(); ++q )
+	for ( size_t q = 0; q < includePaths.size(); ++q )
 	{
 		al_trace("Include path %d: ",q);
 		safe_al_trace(includePaths.at(q).c_str());
@@ -32568,7 +32690,7 @@ void FFScript::do_LowerToUpper(const bool v)
 		zprint("String passed to UpperToLower() is too small. Size is: %d \n", strA.size());
 		set_register(sarg1, 0); return;
 	}
-	for ( unsigned int q = 0; q < strA.size(); ++q )
+	for ( size_t q = 0; q < strA.size(); ++q )
 	{
 		strA[q] -= 32 * (strA[q] >= 'a' && strA[q] <= 'z');
 		//if(( strA[q] >= 'a' && strA[q] <= 'z' ) || ( strA[q] >= 'A' && strA[q] <= 'Z' ))
@@ -32599,7 +32721,7 @@ void FFScript::do_UpperToLower(const bool v)
 		Z_scripterrlog("String passed to UpperToLower() is too small. Size is: %d \n", strA.size());
 		set_register(sarg1, 0); return;
 	}
-	for ( unsigned int q = 0; q < strA.size(); ++q )
+	for ( size_t q = 0; q < strA.size(); ++q )
 	{
 		strA[q] += 32 * (strA[q] >= 'A' && strA[q] <= 'Z');
 		//if(( strA[q] >= 'a' && strA[q] <= 'z' ) || ( strA[q] >= 'A' && strA[q] <= 'Z' ))
@@ -32895,7 +33017,7 @@ void FFScript::do_ConvertCase(const bool v)
 		Z_scripterrlog("String passed to UpperToLower() is too small. Size is: %d \n", strA.size());
 		set_register(sarg1, 0); return;
 	}
-	for ( unsigned int q = 0; q < strA.size(); ++q )
+	for ( size_t q = 0; q < strA.size(); ++q )
 	{
 		if ( strA[q] < 'a' )
 			strA[q] += 32 * (strA[q] >= 'A' && strA[q] <= 'Z');
@@ -35598,12 +35720,20 @@ script_variable ZASMVars[]=
 	{ "MAPDATACOMBOED", MAPDATACOMBOED, 0, 0 },
 	{ "COMBODEFFECT", COMBODEFFECT, 0, 0 },
 	{ "SCREENSECRETSTRIGGERED", SCREENSECRETSTRIGGERED, 0, 0 },
-	{ "PADDINGR9", PADDINGR9, 0, 0 },
+	{ "ITEMDIR", ITEMDIR, 0, 0 },
 	{ "NPCFRAME", NPCFRAME, 0, 0 },
 	{ "LINKITEMX",           LINKITEMX,            0,             0 },
 	{ "LINKITEMY",           LINKITEMY,            0,             0 },
 	{ "ACTIVESSSPEED",           ACTIVESSSPEED,            0,             0 },
 	{ "HEROISWARPING",           HEROISWARPING,            0,             0 },
+	{ "ITEMGLOWRAD",           ITEMGLOWRAD,            0,             0 },
+	{ "NPCGLOWRAD",           NPCGLOWRAD,            0,             0 },
+	{ "LWPNGLOWRAD",           LWPNGLOWRAD,            0,             0 },
+	{ "EWPNGLOWRAD",           EWPNGLOWRAD,            0,             0 },
+	{ "ITEMGLOWSHP",           ITEMGLOWSHP,            0,             0 },
+	{ "NPCGLOWSHP",           NPCGLOWSHP,            0,             0 },
+	{ "LWPNGLOWSHP",           LWPNGLOWSHP,            0,             0 },
+	{ "EWPNGLOWSHP",           EWPNGLOWSHP,            0,             0 },
 	{ " ",                       -1,             0,             0 }
 };
 

@@ -2603,20 +2603,12 @@ int readheader(PACKFILE *f, zquestheader *Header, bool keepdata, byte printmetad
 			{
 				case 0x255:
 				{
-					switch(tempheader.build)
-					{
-						default:
-						zprint2("Last saved in ZC Editor Version: 2.55.0, Alpha Build ID: %d\n", tempheader.build); break;	
-					}
+					zprint2("Last saved in ZC Editor Version: 2.55.0, Alpha Build ID: %d\n", tempheader.build);
 					break;
 				}
 				case 0x254:
 				{
-					switch(tempheader.build)
-					{
-						default:
-						zprint2("Last saved in ZC Editor Version: 2.54.0, Alpha Build ID: %d\n", tempheader.build); break;	
-					}
+					zprint2("Last saved in ZC Editor Version: 2.54.0, Alpha Build ID: %d\n", tempheader.build);
 					break;
 				}
 				case 0x250:
@@ -17166,7 +17158,6 @@ int readcolordata(PACKFILE *f, miscQdata *Misc, word version, word build, word s
 
 int readtiles(PACKFILE *f, tiledata *buf, zquestheader *Header, word version, word build, word start_tile, int max_tiles, bool from_init, bool keepdata)
 {
-    int dummy;
     int tiles_used=0;
 	word section_version = 0;
 	word section_cversion = 0;
@@ -18996,6 +18987,39 @@ int readinitdata(PACKFILE *f, zquestheader *Header, bool keepdata)
 			temp_zinit.scrcnt[q] = 0;
 			temp_zinit.scrmaxcnt[q] = 0;
 		}
+	}
+	
+	
+	if(s_version > 23)
+	{
+		if(!p_getc(&temp_zinit.dither_type,f,true))
+		{
+			return qe_invalid;
+		}
+		if(!p_getc(&temp_zinit.dither_arg,f,true))
+		{
+			return qe_invalid;
+		}
+		if(!p_getc(&temp_zinit.dither_percent,f,true))
+		{
+			return qe_invalid;
+		}
+		if(!p_getc(&temp_zinit.def_lightrad,f,true))
+		{
+			return qe_invalid;
+		}
+		if(!p_getc(&temp_zinit.transdark_percent,f,true))
+		{
+			return qe_invalid;
+		}
+	}
+	else
+	{
+		temp_zinit.dither_type = 0;
+		temp_zinit.dither_arg = 0;
+		temp_zinit.dither_percent = 20;
+		temp_zinit.def_lightrad = 24;
+		temp_zinit.transdark_percent = 0;
 	}
 	
 	if(keepdata==true)
