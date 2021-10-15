@@ -3732,8 +3732,6 @@ void game_loop()
         
 	if ( !FFCore.system_suspend[susptONEFRAMECONDS] )  clear_script_one_frame_conditions(); //clears npc->HitBy[] for this frame: the timing on this may need adjustment. 
 	
-	if ( !FFCore.system_suspend[susptITEMSCRIPTENGINE] )  FFCore.itemScriptEngine(); //run before lweapon scripts
-	
 	if ( !FFCore.system_suspend[susptLINK] )
 	{
 		for(int i = 0; i < (gofast ? 8 : 1); i++)
@@ -3756,6 +3754,10 @@ void game_loop()
 		    checklink=false;
 		}
 	}
+	
+	if ( !FFCore.system_suspend[susptITEMSCRIPTENGINE] )  FFCore.itemScriptEngine(); //run before lweapon scripts
+	
+	
 	//FFCore.itemScriptEngine(); //run before lweapon scripts
         #if LOGGAMELOOP > 0
 	al_trace("game_loop is calling: %s\n", "do_magic_casting()\n");

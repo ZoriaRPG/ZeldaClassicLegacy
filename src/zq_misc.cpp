@@ -1635,7 +1635,7 @@ int onAbout()
 		if ( V_ZC_ALPHA )
 		{
 			//sprintf(buf2,"%s Alpha Build: %d, Date: %s",VerStr(ZELDA_VERSION), VERSION_BUILD, DATE_STR);
-			sprintf(buf2,"Alpha %d, Build: %d",V_ZC_ALPHA, VERSION_BUILD);
+			sprintf(buf2,"Alpha %d, Build: %d, Built by: %s:",V_ZC_ALPHA, VERSION_BUILD, DEV_SIGNOFF);
 			sprintf(buf3,"Build Date: %s %s, %d at @ %s %s", dayextension(BUILDTM_DAY).c_str(), (char*)months[BUILDTM_MONTH], BUILDTM_YEAR, __TIME__, __TIMEZONE__);
 			//break;
 		}
@@ -1643,14 +1643,14 @@ int onAbout()
 		//case 1:
 		else if ( V_ZC_BETA )
 		{
-			sprintf(buf2,"Beta %d, Build: %d",V_ZC_BETA, VERSION_BUILD);
+			sprintf(buf2,"Beta %d, Build: %d, Built by: %s:",V_ZC_BETA, VERSION_BUILD, DEV_SIGNOFF);
 			sprintf(buf3,"Build Date: %s %s, %d at @ %s %s", dayextension(BUILDTM_DAY).c_str(), (char*)months[BUILDTM_MONTH], BUILDTM_YEAR, __TIME__, __TIMEZONE__);
 			//break;
 		}
 		
 		else if ( V_ZC_GAMMA )
 		{
-			sprintf(buf2,"Gamma %d, Build: %d",V_ZC_GAMMA, VERSION_BUILD);
+			sprintf(buf2,"Gamma %d, Build: %d, Built by: %s:",V_ZC_GAMMA, VERSION_BUILD, DEV_SIGNOFF);
 			sprintf(buf3,"Build Date: %s %s, %d at @ %s %s", dayextension(BUILDTM_DAY).c_str(), (char*)months[BUILDTM_MONTH], BUILDTM_YEAR, __TIME__, __TIMEZONE__);
 			//break;
 		}
@@ -1658,7 +1658,7 @@ int onAbout()
 		//case 0:
 		else
 		{
-		    sprintf(buf2,"Release %d, Build: %d",V_ZC_RELEASE, VERSION_BUILD);
+		    sprintf(buf2,"Release %d, Build: %d, Built by: %s:",V_ZC_RELEASE, VERSION_BUILD, DEV_SIGNOFF);
 		    sprintf(buf3,"Build Date: %s %s, %d at @ %s %s", dayextension(BUILDTM_DAY).c_str(), (char*)months[BUILDTM_MONTH], BUILDTM_YEAR, __TIME__, __TIMEZONE__);
 			//break;
 		}
